@@ -1,0 +1,87 @@
+Main menu:
+
+|-------------------------------|
+|	Welcome to fantasy hockey!	|
+|-------------------------------|
+
+	1. Dashboard (research)
+	2. Play game
+	3. Exit
+
+>Enter the number of your choice: 4
+>That was not a valid option. Please try again: 1
+
+################################################
+Dashboard:
+
+|-------------------------------|
+|			Dashboard			|
+|-------------------------------|
+
+	1. Search by year
+	2. Search by team
+
+>Enter your choice: 1
+
+>Enter a year from 1922 - 20XX: 1922
+
+Here are the teams that played that year:
+TOR		MTL		TML		LAK
+(put all teams that played that year here)
+
+Enter the abbreviation for the team of your choice or BK to pick another year: MTL
+
+#################################################
+
+|-------------------------------|
+|			Dashboard			|
+|-------------------------------|
+
+	1. Search by year
+	2. Search by team
+	3. Generate PDF
+	4. Quick add
+	5. Remove team
+
+>Enter your choice: 2
+Valid team abbreviations:
+TOR		MTL		TML		LAK
+(put all teams here)
+
+>Enter a team abbreviation: TOR
+
+Toronot Maple Leafs played in:
+1922	1927	2068
+
+>Select a year:
+
+Current selections: TOR 1922, MTL 1923, etc...
+
+	1. Add another team
+	2. Generate PDF
+	3. Manage teams
+
+Enter your choice: 2
+(goes back to beginning of Dashboard if they choose 1)
+
+Enter pathname: C:\Users\Desktop\output.pdf
+(goes to main menu if generate PDF is chosen, PDF generated in chosen directory)
+
+#################################################
+
+If remove team is chosen
+
+Current selections:
+A) TOR 1922
+B) MTL 2923
+
+>Enter the team you would like to remove, or BK to go to Dashboard: 
+
+
+
+
+
+
+
+
+
