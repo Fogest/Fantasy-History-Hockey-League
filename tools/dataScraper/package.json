@@ -1,0 +1,12 @@
+{
+  "name"         : "node-web-scrape",
+  "version"      : "0.0.1",
+  "description"  : "Scrape hockey-reference",
+  "main"         : "main.js",
+  "author"       : "Justin Visser",
+  "dependencies" : {
+    "request"    : "latest",
+    "cheerio"    : "latest",
+	"fs"         : "latest"
+  }
+}
