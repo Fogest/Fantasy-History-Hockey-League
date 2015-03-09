@@ -17,5 +17,8 @@ The first row of every csv file are the headings for the CSV file (csv standard)
 
 If you look at the files from early years there are usually a lot of missing stats. This is not a bug, this is just what the tables contained. The headings are all still present however, and the column still contains a `""`. So you simply should check if the field is empty or not. The years closer to ours usually contain full data.
 
+## Methodology
+The data was collected via a javascript file running with [Nodejs](https://nodejs.org/). The file includes the following libraries: [cheerio](https://github.com/cheeriojs/cheerio), [request](https://github.com/request/request), and [fs](https://nodejs.org/api/fs.html).
+
 ## Misc
 If you would like the data in any other format feel free to contact me and I may be able to help you. Simply email me at [justin@jhvisser.com](mailto:justin@jhvisser.com) and I'll get back to you ASAP. The code used to scrape the website is made by me (Justin Visser), and will not be shared. Only data is being shared, no code! 
