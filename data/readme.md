@@ -9,6 +9,7 @@ The file structure is: `<year>/<csvName>.csv`. An example is `2000/players.csv`.
 1. `players.csv` - Contains the the players for ALL teams for the specific year. Use the "teamName" heading to get the abbreviated team name of the player. There is a large amount of data here about each player. 
 2. `results.csv` - Contains the results of every single game during the season. Includes who played who, the score, as well as dates and abbreviations. 
 3. `teams.csv` - Simply a list of all the teams in a season associated with some stats about the team. Includes full team name and abbreviations. 
+4. `goalies.csv` - Provides a file just like `players.csv` except with data for goalies. This is all of the goalies for the season! 
 
 ### CSV Format
 The csv is formatted just like Hockey Reference's tables, except in some cases a team abbreviation has been added on as the table did not contain them. The abbreviations are present in every CSV file. This is the ideal way to refer to teams. The full name is only in `teams.csv` and `results.csv`, but is not in `players.csv` so be careful!
