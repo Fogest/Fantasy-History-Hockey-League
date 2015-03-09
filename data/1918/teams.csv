@@ -1,0 +1,4 @@
+rank,teamName,teamAbrv,gamesPlayed,wins,losses,ties,points,pointsPercentage,goalsFor,goalsAgainst,simpleRatingSystem,strengthOfSchedule,totalGoalsPerGame,powerPlayGoals,powerPlayChances,powerPlayPercentage,powerPlayGoalsAgainst,powerPlayChancesAgainst,penaltyKillingPercentage,shortHandedGoals,shortHandedGoalsAgainst,shots,shootingPercentage,shotsAgainst,savePercentage,pdo
+"1","Ottawa Senators","OTS","18","12","6","0","24",".667","71","53","0.67","-0.33","6.89","","","","","","","","","","","","",""
+"2","Montreal Canadiens","MTL","18","10","8","0","20",".556","88","78","0.37","-0.19","9.22","","","","","","","","","","","","",""
+"3","Toronto Arenas","TRA","18","5","13","0","10",".278","64","92","-1.04","0.52","8.67","","","","","","","","","","","","",""

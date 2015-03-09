@@ -1,0 +1,8 @@
+rank,teamName,teamAbrv,gamesPlayed,wins,losses,ties,points,pointsPercentage,goalsFor,goalsAgainst,simpleRatingSystem,strengthOfSchedule,totalGoalsPerGame,powerPlayGoals,powerPlayChances,powerPlayPercentage,powerPlayGoalsAgainst,powerPlayChancesAgainst,penaltyKillingPercentage,shortHandedGoals,shortHandedGoalsAgainst,shots,shootingPercentage,shotsAgainst,savePercentage,pdo
+"1","Ottawa Senators","OTS","36","24","8","4","52",".722","77","42","0.83","-0.14","3.31","","","","","","","","","","","","",""
+"2","Montreal Maroons","MTM","36","20","11","5","45",".625","91","73","0.43","-0.07","4.56","","","","","","","","","","","","",""
+"3","Pittsburgh Pirates","PTP","36","19","16","1","39",".542","82","70","0.29","-0.05","4.22","","","","","","","","","","","","",""
+"4","Boston Bruins","BOS","36","17","15","4","38",".528","92","85","0.17","-0.03","4.92","","","","","","","","","","","","",""
+"5","New York Americans","NYA","36","12","20","4","28",".389","68","89","-0.50","0.08","4.36","","","","","","","","","","","","",""
+"6","Toronto St. Patricks","TRS","36","12","21","3","27",".375","92","114","-0.53","0.09","5.72","","","","","","","","","","","","",""
+"7","Montreal Canadiens","MTL","36","11","24","1","23",".319","79","108","-0.69","0.11","5.19","","","","","","","","","","","","",""

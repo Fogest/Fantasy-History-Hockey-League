@@ -1,0 +1,7 @@
+rank,teamName,teamAbrv,gamesPlayed,wins,losses,ties,points,pointsPercentage,goalsFor,goalsAgainst,simpleRatingSystem,strengthOfSchedule,totalGoalsPerGame,powerPlayGoals,powerPlayChances,powerPlayPercentage,powerPlayGoalsAgainst,powerPlayChancesAgainst,penaltyKillingPercentage,shortHandedGoals,shortHandedGoalsAgainst,shots,shootingPercentage,shotsAgainst,savePercentage,pdo
+"1","Montreal Canadiens","MTL","70","43","17","10","96",".686","250","158","1.10","-0.22","5.83","","","","","","","","","","","","",""
+"2","New York Rangers","NYR","70","32","25","13","77",".550","195","188","0.08","-0.02","5.47","","","","","","","","","","","","",""
+"3","Detroit Red Wings","DET","70","29","29","12","70",".500","176","207","-0.37","0.07","5.47","","","","","","","","","","","","",""
+"4","Boston Bruins","BOS","70","27","28","15","69",".493","199","194","0.06","-0.01","5.61","","","","","","","","","","","","",""
+"5","Chicago Black Hawks","CBH","70","24","39","7","55",".393","163","202","-0.46","0.09","5.21","","","","","","","","","","","","",""
+"6","Toronto Maple Leafs","TOR","70","21","38","11","53",".379","192","226","-0.41","0.08","5.97","","","","","","","","","","","","",""

@@ -1,0 +1,7 @@
+rank,teamName,teamAbrv,gamesPlayed,wins,losses,ties,points,pointsPercentage,goalsFor,goalsAgainst,simpleRatingSystem,strengthOfSchedule,totalGoalsPerGame,powerPlayGoals,powerPlayChances,powerPlayPercentage,powerPlayGoalsAgainst,powerPlayChancesAgainst,penaltyKillingPercentage,shortHandedGoals,shortHandedGoalsAgainst,shots,shootingPercentage,shotsAgainst,savePercentage,pdo
+"1","Hamilton Tigers","HAM","30","19","10","1","39",".650","90","60","0.83","-0.17","5.00","","","","","","","","","","","","",""
+"2","Toronto St. Patricks","TRS","30","19","11","0","38",".633","90","84","0.17","-0.03","5.80","","","","","","","","","","","","",""
+"3","Montreal Canadiens","MTL","30","17","11","2","36",".600","93","56","1.03","-0.21","4.97","","","","","","","","","","","","",""
+"4","Ottawa Senators","OTS","30","17","12","1","35",".583","83","66","0.47","-0.09","4.97","","","","","","","","","","","","",""
+"5","Montreal Maroons","MTM","30","9","19","2","20",".333","45","65","-0.56","0.11","3.67","","","","","","","","","","","","",""
+"6","Boston Bruins","BOS","30","6","24","0","12",".200","49","119","-1.94","0.39","5.60","","","","","","","","","","","","",""
