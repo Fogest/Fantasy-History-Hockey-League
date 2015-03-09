@@ -80,6 +80,40 @@ function doPlayersRequest(year, dir, url, csv) {
 	});
 }
 
+function doGoaliesRequest(year, dir, url, csv) {
+	request(url, function(err, resp, data){
+		if (!err) {
+			var $ = cheerio.load(data);
+			
+			csv += "rank,player,age,teamName,gamesPlayed,gamesStarted,wins,losses,plusMinus,goalsAgainst,shotsAgainst,saves,savePercentage,goalsAgainstAverage,shutouts,minutes,shortHandedAssists,qualityStarts,qualityStartsPercentage,badStarts,goalsAllowedPercentage,savedAboveAverage,goals,assists,points,penaltyMinutes\n";
+			$("#div_stats table tbody tr").each(function() {
+				//Only take if not one of the headings.
+				if(!($(this).hasClass("no_ranker"))) {
+					$('td',this).each(function(index,element) {
+						if(index >= 24)
+							var field = '"' + $(this).text().replace('*','') + '"';
+						else
+							var field = '"' + $(this).text().replace('*','') + '"' + index +',';
+						csv += field;
+					});
+					csv += "\n";
+				}
+			});
+			if (!fs.existsSync(dir)){
+				fs.mkdirSync(dir);
+			}
+			
+			fs.writeFile(dir + "goalies.csv", csv, function(err) {
+				if(err) {
+					console.log(err);
+				} else {
+					console.log("The file was saved!");
+				}
+			});
+		}
+	});
+}
+
 function doTeamRequest(year, dir, url, csv) {
 	request(url, function(err, resp, data){
 		if (!err) {
@@ -137,6 +171,10 @@ function getResults() {
 		url = "http://www.hockey-reference.com/leagues/NHL_"+ (year+1) +"_skaters.html";
 		csv = "";
 		doPlayersRequest(year, dir, url, csv);
+
+		url = "http://www.hockey-reference.com/leagues/NHL_"+ (year+1) +"_goalies.html";
+		csv = "";
+		doGoaliesRequest(year, dir, url, csv);
 		
 		url = "http://www.hockey-reference.com/leagues/NHL_"+ (year+1) +".html";
 		csv = "";
@@ -153,9 +191,9 @@ function testing() {
 	var csv = "";
 	
 	dir = "../../data/" + year + "/";
-	url = "http://www.hockey-reference.com/leagues/NHL_"+ (year+1) +".html";
+	url = "http://www.hockey-reference.com/leagues/NHL_"+ (year+1) +"_goalies.html";
 	csv = "";
-	doTeamRequest(year, dir, url, csv);
+	doGoaliesRequest(year, dir, url, csv);
 	
 	year++;
 }
