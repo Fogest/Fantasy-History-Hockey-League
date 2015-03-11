@@ -6,7 +6,7 @@ $usrInput3 = 0;
 $usrInput4 = 0;
 $usrYearInput = 1900;
 $usrTeamInput = "default";
-while ( $usrInput1 != 3)
+while ($usrInput1 != 3)
 {
     $usrInput2 = 0;
     print "|----------------------------|\n";
@@ -45,18 +45,17 @@ while ( $usrInput1 != 3)
             }
             if ($usrInput2 == 2)
             {
+                $usrTeamInput = "default";
                 while ($usrTeamInput ne "exit")
                 {
                     print "Here is a list of teams to choose from:";
 
-#
-# open the team file which holds all the team abbreviations
-# then print to the screen
-#
-                    $usrTeamInput= "exit";
+                    # open the team file which holds all the team abbreviations
+                    # then print to the screen
 
                     print "\n\nEnter the abreviation you want to use, or type exit to return to the main menu:";
                     $usrTeamInput= <>;
+                    chomp ($usrTeamInput);
                     if ($usrTeamInput eq "exit")
                     {
                         $usrInput2 = 0; 
