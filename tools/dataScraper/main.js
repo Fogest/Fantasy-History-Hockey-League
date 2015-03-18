@@ -85,7 +85,7 @@ function doGoaliesRequest(year, dir, url, csv) {
 		if (!err) {
 			var $ = cheerio.load(data);
 			
-			csv += "rank,player,age,teamName,gamesPlayed,gamesStarted,wins,losses,plusMinus,goalsAgainst,shotsAgainst,saves,savePercentage,goalsAgainstAverage,shutouts,minutes,shortHandedAssists,qualityStarts,qualityStartsPercentage,badStarts,goalsAllowedPercentage,savedAboveAverage,goals,assists,points,penaltyMinutes\n";
+			csv += "rank,player,age,teamName,gamesPlayed,gamesStarted,wins,losses,plusMinus,goalsAgainst,shotsAgainst,saves,savePercentage,goalsAgainstAverage,shutouts,minutes,qualityStarts,qualityStartsPercentage,badStarts,goalsAllowedPercentage,savedAboveAverage,goals,assists,points,penaltyMinutes\n";
 			$("#div_stats table tbody tr").each(function() {
 				//Only take if not one of the headings.
 				if(!($(this).hasClass("no_ranker"))) {
@@ -93,7 +93,7 @@ function doGoaliesRequest(year, dir, url, csv) {
 						if(index >= 24)
 							var field = '"' + $(this).text().replace('*','') + '"';
 						else
-							var field = '"' + $(this).text().replace('*','') + '"' + index +',';
+							var field = '"' + $(this).text().replace('*','') + '"' +',';
 						csv += field;
 					});
 					csv += "\n";
