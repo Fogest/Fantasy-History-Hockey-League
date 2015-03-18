@@ -127,7 +127,7 @@ function doTeamRequest(year, dir, url, csv) {
 						if(index >= 25)
 							var field = '"' + $(this).text().replace('*','') + '"';
 						else
-							var field = '"' + $(this).text().replace('*','') + '"' + ',';
+							var field = '"' + $(this).text().replace('*','') + '"'+ index + ',';
 						csv += field;
 						
 						if(index == 1) {
@@ -189,14 +189,16 @@ function testing() {
 	var dir = "";
 	var url = "";
 	var csv = "";
-	
-	dir = "../../data/" + year + "/";
-	url = "http://www.hockey-reference.com/leagues/NHL_"+ (year+1) +"_goalies.html";
-	csv = "";
-	doGoaliesRequest(year, dir, url, csv);
-	
+
+	while (year < 2015) {
+    dir = "../../data/" + year + "/";
+    url = "http://www.hockey-reference.com/leagues/NHL_"+ (year+1) +".html";
+    csv = "";
+    doTeamRequest(year, dir, url, csv);
+
 	year++;
+    }
 }
 
-//testing();
-getResults();
+testing();
+//getResults();
