@@ -1,7 +1,7 @@
-rank,player,age,teamName,gamesPlayed,gamesStarted,wins,losses,plusMinus,goalsAgainst,shotsAgainst,saves,savePercentage,goalsAgainstAverage,shutouts,minutes,shortHandedAssists,qualityStarts,qualityStartsPercentage,badStarts,goalsAllowedPercentage,savedAboveAverage,goals,assists,points,penaltyMinutes
-"1","Clint Benedict","31","OTS","22","","15","7","0","45","","","","1.99","3","1356","","","","","","0","0","0","0"
-"2","Jake Forbes","26","HAM","24","","9","15","0","68","","","","2.75","1","1483","","","","","","0","0","0","0"
-"3","Sammy Hebert","29","OTS","2","","1","1","0","9","","","","4.50","0","120","","","","","","0","0","0","0"
-"4","Howard Lockhart","28","TRS","1","","0","1","0","5","","","","5.00","0","60","","","","","","0","0","0","0"
-"5","John Ross Roach","23","TRS","23","","10","13","0","80","","","","3.48","1","1380","","","","","","0","0","0","0"
-"6","Georges Vezina","37","MTL","24","","13","11","0","48","","","","1.97","3","1459","","","","","","0","0","0","0"
+rank,player,age,teamName,gamesPlayed,gamesStarted,wins,losses,plusMinus,goalsAgainst,shotsAgainst,saves,savePercentage,goalsAgainstAverage,shutouts,minutes,qualityStarts,qualityStartsPercentage,badStarts,goalsAllowedPercentage,savedAboveAverage,goals,assists,points,penaltyMinutes
+"1","Clint Benedict","31","OTS","22","","15","7","0","45","","","","1.99","3","1356","","","","","","0","0","0""0"
+"2","Jake Forbes","26","HAM","24","","9","15","0","68","","","","2.75","1","1483","","","","","","0","0","0""0"
+"3","Sammy Hebert","29","OTS","2","","1","1","0","9","","","","4.50","0","120","","","","","","0","0","0""0"
+"4","Howard Lockhart","28","TRS","1","","0","1","0","5","","","","5.00","0","60","","","","","","0","0","0""0"
+"5","John Ross Roach","23","TRS","23","","10","13","0","80","","","","3.48","1","1380","","","","","","0","0","0""0"
+"6","Georges Vezina","37","MTL","24","","13","11","0","48","","","","1.97","3","1459","","","","","","0","0","0""0"

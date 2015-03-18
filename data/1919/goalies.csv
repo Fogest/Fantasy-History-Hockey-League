@@ -1,9 +1,9 @@
-rank,player,age,teamName,gamesPlayed,gamesStarted,wins,losses,plusMinus,goalsAgainst,shotsAgainst,saves,savePercentage,goalsAgainstAverage,shutouts,minutes,shortHandedAssists,qualityStarts,qualityStartsPercentage,badStarts,goalsAllowedPercentage,savedAboveAverage,goals,assists,points,penaltyMinutes
-"1","Clint Benedict","27","OTS","24","","19","5","0","64","","","","2.66","5","1443","","","","","","0","0","0","0"
-"2","Frank Brophy","19","QBC","21","","3","18","0","148","","","","7.11","0","1249","","","","","","0","0","0","0"
-"3","Jack Darragh","29","OTS","1","","0","0","0","0","","","","0.00","0","2","","","","","","22","14","36","22"
-"4","Jake Forbes","22","TRS","5","","2","3","0","21","","","","4.20","0","300","","","","","","0","0","0","0"
-"5","Howard Lockhart","24","TOT","8","","4","3","0","36","","","","5.84","0","370","","","","","","0","0","0","0"
-"6","Mike Mitchell","26","TRS","16","","6","7","0","60","","","","4.34","0","830","","","","","","0","0","0","0"
-"7","Harry Mummery","30","QBC","3","","1","1","0","18","","","","7.61","0","142","","","","","","9","9","18","42"
-"8","Georges Vezina","33","MTL","24","","13","11","0","113","","","","4.66","0","1456","","","","","","0","0","0","0"
+rank,player,age,teamName,gamesPlayed,gamesStarted,wins,losses,plusMinus,goalsAgainst,shotsAgainst,saves,savePercentage,goalsAgainstAverage,shutouts,minutes,qualityStarts,qualityStartsPercentage,badStarts,goalsAllowedPercentage,savedAboveAverage,goals,assists,points,penaltyMinutes
+"1","Clint Benedict","27","OTS","24","","19","5","0","64","","","","2.66","5","1443","","","","","","0","0","0""0"
+"2","Frank Brophy","19","QBC","21","","3","18","0","148","","","","7.11","0","1249","","","","","","0","0","0""0"
+"3","Jack Darragh","29","OTS","1","","0","0","0","0","","","","0.00","0","2","","","","","","22","14","36""22"
+"4","Jake Forbes","22","TRS","5","","2","3","0","21","","","","4.20","0","300","","","","","","0","0","0""0"
+"5","Howard Lockhart","24","TOT","8","","4","3","0","36","","","","5.84","0","370","","","","","","0","0","0""0"
+"6","Mike Mitchell","26","TRS","16","","6","7","0","60","","","","4.34","0","830","","","","","","0","0","0""0"
+"7","Harry Mummery","30","QBC","3","","1","1","0","18","","","","7.61","0","142","","","","","","9","9","18""42"
+"8","Georges Vezina","33","MTL","24","","13","11","0","113","","","","4.66","0","1456","","","","","","0","0","0""0"
