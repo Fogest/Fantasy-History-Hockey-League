@@ -93,7 +93,7 @@ function doGoaliesRequest(year, dir, url, csv) {
 						if(index >= 24)
 							var field = '"' + $(this).text().replace('*','') + '"';
 						else
-							var field = '"' + $(this).text().replace('*','') + '"' + index +',';
+							var field = '"' + $(this).text().replace('*','') + '"' +',';
 						csv += field;
 					});
 					csv += "\n";
