@@ -1,5 +1,5 @@
 rank,teamName,teamAbrv,gamesPlayed,wins,losses,ties,points,pointsPercentage,goalsFor,goalsAgainst,simpleRatingSystem,strengthOfSchedule,totalGoalsPerGame,powerPlayGoals,powerPlayChances,powerPlayPercentage,powerPlayGoalsAgainst,powerPlayChancesAgainst,penaltyKillingPercentage,shortHandedGoals,shortHandedGoalsAgainst,shots,shootingPercentage,shotsAgainst,savePercentage,pdo
-"1","Toronto St. Patricks","TRS","24","15","9","0","30",".625","105","100","0.16","-0.05","8.54","","","","","","","","","","","","","",
-"2","Ottawa Senators","OTS","24","14","10","0","28",".583","97","75","0.69","-0.23","7.17","","","","","","","","","","","","","",
-"3","Montreal Canadiens","MTL","24","13","11","0","26",".542","112","99","0.41","-0.14","8.79","","","","","","","","","","","","","",
-"4","Hamilton Tigers","HAM","24","6","18","0","12",".250","92","132","-1.25","0.42","9.33","","","","","","","","","","","","","",
+"1"0,"Toronto St. Patricks"1,"TRS","24"2,"15"3,"9"4,"0"5,"30"6,".625"7,"105"8,"100"9,"0.16"10,"-0.05"11,"8.54"12,""13,""14,""15,""16,""17,""18,""19,""20,""21,""22,""23,""24,""
+"2"0,"Ottawa Senators"1,"OTS","24"2,"14"3,"10"4,"0"5,"28"6,".583"7,"97"8,"75"9,"0.69"10,"-0.23"11,"7.17"12,""13,""14,""15,""16,""17,""18,""19,""20,""21,""22,""23,""24,""
+"3"0,"Montreal Canadiens"1,"MTL","24"2,"13"3,"11"4,"0"5,"26"6,".542"7,"112"8,"99"9,"0.41"10,"-0.14"11,"8.79"12,""13,""14,""15,""16,""17,""18,""19,""20,""21,""22,""23,""24,""
+"4"0,"Hamilton Tigers"1,"HAM","24"2,"6"3,"18"4,"0"5,"12"6,".250"7,"92"8,"132"9,"-1.25"10,"0.42"11,"9.33"12,""13,""14,""15,""16,""17,""18,""19,""20,""21,""22,""23,""24,""

@@ -124,10 +124,10 @@ function doTeamRequest(year, dir, url, csv) {
 				//Only take if not one of the headings.
 				if(!($(this).hasClass("no_ranker"))) {
 					$('td',this).each(function(index,element) {
-						if(index >= 26)
+						if(index >= 25)
 							var field = '"' + $(this).text().replace('*','') + '"';
 						else
-							var field = '"' + $(this).text().replace('*','') + '"' + ',';
+							var field = '"' + $(this).text().replace('*','') + '"'+ index + ',';
 						csv += field;
 						
 						if(index == 1) {
