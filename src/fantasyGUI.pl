@@ -12,16 +12,17 @@ my $usrYearInput = 1900;
 my $usrTeamInput = "default";
 
 
-while ($usrInput1 != 3)
+while ($usrInput1 != 4)
 {
     $usrInput2 = 0; 
     print "|-----------------------------|\n";
     print "|- Welcome to Fantasy Hockey- |\n";
     print "|-----------------------------|\n";
 
-    print "1. Dashboard\n";
+    print "1. Choose your Teams\n";
     print "2. Play Game\n";
-    print "3. Exit\n\n";
+    print "3. Statistics\n";
+    print "4. Exit\n\n";
 
     print "Enter the number of your choice:";
     $usrInput1 = <>;
@@ -33,7 +34,7 @@ while ($usrInput1 != 3)
         {
             $usrYearInput = 1900;
             print "|----------------------------|\n";
-            print "|---------Dashboard----------|\n";
+            print "|------Choose Your Team------|\n";
             print "|----------------------------|\n\n";
 
 
