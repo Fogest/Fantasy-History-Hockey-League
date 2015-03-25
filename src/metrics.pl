@@ -6,25 +6,24 @@ use warnings;
 #  Created By Nick
 #####testing fake info
 my @teamNames=("MTL","OTS");
-my @MTLa=(2,1,4,0,4,2,1,2,3);
-my @MTLf=(4,5,6,2,0,1,3,4,4);
+my @MTLa=(2,1,4,0,4,2,2,3,3,3,3,1,2,3,11,11);
+my @MTLf=(1,1,1,2,2,2,1,1,1,3,3,3,4,4,4,100,1);
 my @MTL = (@MTLf,@MTLa);
 my @OTSa=(3,3,3,3,3,3,3,3,3);
 my @OTSf=(2,2,2,2,2,1,0,1,0);
 my @OTS = (@OTSf,@OTSa);
 ####################
-
 my @plusMinus1;
 my @plusMinus2;
 #############
 @plusMinus1 =&calcPM(\@MTLa,\@MTLf);
-
+print "plusMinus1: \n";
 foreach (@plusMinus1){
     print $_,"\n";
 };
 
 @plusMinus2 =&calcPM(\@OTSa,\@OTSf);
-
+print "plusMinus2: \n";
 foreach (@plusMinus2){
     print $_,"\n";
 };
@@ -32,8 +31,47 @@ foreach (@plusMinus2){
 my @quart1;
 my @quart2;
 
-@quart1 = &quarterly(\@MTLa);
-print @quart1;
+@quart1 = &quarterly(\@MTLf);
+print "quartely offence: \n";
+foreach(@quart1)
+{
+    print $_,"\n";
+}
+
+
+@quart2 = &quarterly(\@MTLa);
+print "quartely defence: \n";
+foreach(@quart2)
+{
+    print $_,"\n";
+}
+
+
+my $random;
+
+$random = roulette(20,5,1);
+
+print "random: $random \n";
+
+my $win;
+
+$win =&calcWinner(\@MTLf,\@MTLa,\@OTSf,\@OTSa);
+
+if($win == 1)
+{
+    print"Team 1 wins\n";
+}
+
+if($win == 2)
+{
+    print"Team 2 wins\n";
+}
+
+if($win == 0)
+{
+    print"draw?\n";
+}
+
 sub calcPM{
 #calculates the PlusMinus of a team given the scores that team made
     my @teama = @{$_[0]};
@@ -42,7 +80,7 @@ sub calcPM{
 
     my $i;
 
-    for($i=0;$i<9;$i++)
+    for($i=0;$i<$#teama+1;$i++)
     {
         $pM[$i] = $teama[$i] - $teamf[$i];
     }
@@ -52,16 +90,89 @@ sub calcPM{
 
 sub quarterly{
     my (@quart) = @{$_[0]};
-    my  $avg=0;
-   
-    my $i;
-    for($i=0;$i<9;$i++)
-    {
-       $avg += $quart[$i]; 
-    }
+    my @avg;
+    my $numGames = $#quart+1; 
+    my $i=0;
+    my $k=0;
+    my $qLength =$numGames/4;
     
-    $avg = $avg /($#quart+1);
-    return $avg;
+    for($i=0;$i<4;$i++)
+    {
+        for($k=$qLength*($i);($k<$numGames) && ($k<$qLength*($i+1));$k++){ 
+            $avg[$i] += $quart[$k]; 
+        }
+        $avg[$i]=int($avg[$i]/$qLength);
+    }
+    return @avg;
 }
 
+sub roulette{
 
+    my ($max,$median,$min) = @_;
+    my $random;
+    
+    $random =int(rand($max))+1;
+    
+    if($random < $median){
+        $random = int(rand($median)+1);
+    }
+    else{
+        $random = int(rand($max)+1);
+    }
+
+    return $random;
+}
+
+sub compareQ{
+
+    my @quart1 = @{$_[0]};
+    my @quart2 = @{$_[1]};
+    my $qNum = $_[2];
+    my $i;
+
+    if($qNum > 0 && $qNum < 4)
+    {
+        $qNum--;
+
+        if(int(rand($quart1[$qNum])+1) > int(rand($quart2[$qNum])+1))
+        {
+            return 1;
+        }
+        else
+        {
+            return 2;
+        }
+    }
+            
+}
+
+sub calcWinner{
+    my @Team1f= @{$_[0]};
+    my @Team1a= @{$_[1]};
+    my @Team2f= @{$_[2]};
+    my @Team2a= @{$_[3]};
+    
+    my @quart1f= quarterly(\@Team1f); 
+    my @quart1a= quarterly(\@Team1a);
+    my @quart2f= quarterly(\@Team2f);
+    my @quart2a= quarterly(\@Team2a);
+    
+    my $winnera = 0; 
+    my $winnerf = 0;
+    
+    $winnera = compareQ(\@quart1a,\@quart2a,3);
+    $winnerf = compareQ(\@quart1f,\@quart2f,3);
+
+    if($winnera == $winnerf)
+    {
+        return $winnera;
+    }
+    else
+    {
+        return 0;
+    }
+}  
+
+sub genScore{
+
+}
