@@ -22,7 +22,7 @@ sub getTeamYear
       if ( $csvTeams->parse($teamsRecord) ) 
       {
          my @TeamsFields = $csvTeams->fields();
-         if ($TeamsFields[1] ne "teamName")
+         if ($TeamsFields[2] ne "teamAbrv")
          {
             $teamNames[i] = $TeamsFields[1];
             $i++;
