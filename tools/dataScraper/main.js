@@ -124,16 +124,34 @@ function doTeamRequest(year, dir, url, csv) {
 				//Only take if not one of the headings.
 				if(!($(this).hasClass("no_ranker"))) {
 					$('td',this).each(function(index,element) {
-						if(index >= 25)
-							var field = '"' + $(this).text().replace('*','') + '"';
-						else
-							var field = '"' + $(this).text().replace('*','') + '"' + ',';
-						csv += field;
-						
-						if(index == 1) {
-							var re = /\/([A-Z]*)\//g; 
-							var match = re.exec($("a",this).attr("href"));
-							csv += '"' + match[1] + '"' + ",";
+						//This is when hockey-reference went crazy and added an extra column.
+						//The elseif is when they decided to get with of the ties column.
+						if(year >= 1999 && year <= 2003 && index == 6) {
+							console.log('Skipping field');
+						} else if(year > 2003 && index == 5) {
+							console.log('Setting tie field to empty (no data)');
+							var field = '"",';
+							csv += field;
+						} else {
+							if(year >= 1999 && year <= 2003) {
+								if(index >= 26)
+									var field = '"' + $(this).text().replace('*','') + '"';
+								else
+									var field = '"' + $(this).text().replace('*','') + '"' + ',';
+							}
+							else {
+								if(index >= 25)
+									var field = '"' + $(this).text().replace('*','') + '"';
+								else
+									var field = '"' + $(this).text().replace('*','') + '"' + ',';
+							}
+							csv += field;
+							
+							if(index == 1) {
+								var re = /\/([A-Z]*)\//g; 
+								var match = re.exec($("a",this).attr("href"));
+								csv += '"' + match[1] + '"' + ",";
+							}
 						}
 					});
 					csv += "\n";
@@ -189,13 +207,15 @@ function testing() {
 	var dir = "";
 	var url = "";
 	var csv = "";
-	
-	dir = "../../data/" + year + "/";
-	url = "http://www.hockey-reference.com/leagues/NHL_"+ (year+1) +"_goalies.html";
-	csv = "";
-	doGoaliesRequest(year, dir, url, csv);
-	
-	year++;
+
+	while (year < 2015) {
+	    dir = "../../data/" + year + "/";
+	    url = "http://www.hockey-reference.com/leagues/NHL_"+ (year+1) +".html";
+	    csv = "";
+	    doTeamRequest(year, dir, url, csv);
+
+		year++;
+    }
 }
 
 //testing();

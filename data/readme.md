@@ -18,6 +18,8 @@ The first row of every csv file are the headings for the CSV file (csv standard)
 
 If you look at the files from early years there are usually a lot of missing stats. This is not a bug, this is just what the tables contained. The headings are all still present however, and the column still contains a `""`. So you simply should check if the field is empty or not. The years closer to ours usually contain full data.
 
+**Update: In the teams.csv there were some issues discovered. From 1999 to 2003 there is a 'OL' column added at hockey-reference.com. For this I simply ignored the OL column. From 2004 to present they drop the ties column. So I simply kept the ties column (want files to be consistent) and made it a blank field.**
+
 ## Methodology
 The data was collected via a javascript file running with [Nodejs](https://nodejs.org/). The file includes the following libraries: [cheerio](https://github.com/cheeriojs/cheerio), [request](https://github.com/request/request), and [fs](https://nodejs.org/api/fs.html).
 
