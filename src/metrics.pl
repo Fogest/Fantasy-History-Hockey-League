@@ -54,17 +54,22 @@ $random = roulette(20,5,1);
 print "random: $random \n";
 
 my $win;
+my @score;
 
 $win =&calcWinner(\@MTLf,\@MTLa,\@OTSf,\@OTSa);
 
 if($win == 1)
 {
     print"Team 1 wins\n";
+    @score = genScore(\@MTLf,\@MTLa);
+    print "Goals: $score[0], Against: $score[1]\n";
 }
 
 if($win == 2)
 {
     print"Team 2 wins\n";
+    @score = genScore(\@OTSf,\@OTSa);
+    print "Goals: $score[0], Against: $score[1]\n";
 }
 
 if($win == 0)
@@ -174,5 +179,45 @@ sub calcWinner{
 }  
 
 sub genScore{
+    my @Teamf= @{$_[0]};
+    my @Teama= @{$_[0]};
 
+    my $i;
+    my $Max =-1;
+    my $Min = 99999;
+    my $average = 0;
+    my $Goalf = 0;
+    my $Goala= 0;
+    my @Goals;
+
+    for($i=0;$i<$#Teamf+1;$i++){
+        if($Teamf[$i] > $Max){
+            $Max = $Teamf[$i];
+        }
+        if($Teamf[$i] < $Min){
+            $Min = $Teamf[$i];
+        }
+        $average=+$Teamf[$i];
+    }
+    $average= int($average / ($#Teamf+1));
+
+    $Goalf = &roulette($Max,$average,$Min);
+    
+    for($i=0;$i<$#Teama+1;$i++){
+        if($Teama[$i] > $Max){
+            $Max = $Teama[$i];
+        }
+        if($Teama[$i] < $Min){
+            $Min = $Teama[$i];
+        }
+        $average=+$Teama[$i];
+    }
+    $average= int($average / ($#Teama+1));
+
+    $Goala = &roulette($Max,$average,$Min);
+    
+    $Goals[0] = $Goalf;
+    $Goals[1] = $Goala;
+    
+    return @Goals;
 }
