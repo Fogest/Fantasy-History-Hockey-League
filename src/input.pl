@@ -47,7 +47,7 @@ sub resultsInfo
    #
    #  Open the results file - assign a file handle
    #
-   open my $resultsFH, '<', ..\data\$year\results.csv
+   open my $resultsFH, '<', "../data/$teamYear/teams.csv"
       or die "Unable to open results file";
 
    my $resultsRecord = <$resultsFH>;
@@ -77,4 +77,22 @@ sub resultsInfo
       }
    }
    @resultsRecord;
+}
+
+sub playersInfo
+{
+   my $year = @_[0];
+
+   use Text::CSV;
+   my $csvPlayers = Text::CSV->new({ sep_char => ',' });
+
+   my @players;
+
+   #
+   #  Open the results file - assign a file handle
+   #
+   open my $playersFH, '<', "../data/$year/players.csv"
+      or die "Unable to open results file";
+
+   my $resultsRecord = <$resultsFH>;   
 }
