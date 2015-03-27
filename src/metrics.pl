@@ -96,17 +96,114 @@ sub loopMatches{
     my @matchArray = @{$_[0]};
     my $numMatches = $#matchArray+1;
     my $i;
+    my $curQuart;
+    my @results;
+    my @home;
+    my @homef;
+    my @homea;
+    my @awayf;
+    my @awaya;
+    my @away;
+#temp data till i can grab data on demand
+    my @MTL1981=(
+      #goalsfor
+        [9,9,9,9,9,0,0,0,0,0,0,0,11,11,11,11],
+      #goalsAgainst  
+        [1,1,1,2,2,2,1,1,1,3,3,3,4,4,4,1,1],
+    );
+
+    my @OTS1990 = (
+      #goalsfor
+        [1,1,1,1,2,2,13,13,13,13,13,13,8,8,8,9],
+      #goalsAgainst
+        [2,2,4,4,1,1,1,3,2,2,1,1,1,1,1,1],
+    );
+
+    my @NYR1988 = (
+      #goalsFor
+        [15,15,15,15,15,15,15,0,0,0,0,0,0,0,0,0],
+      #goalsAgainst
+        [3,3,3,3,3,3,3,7,7,7,7,7,12,12,12,12],
+    );
+    
+###############
     print"SCHEDULE: \n";
     for( $i = 0; $i<$numMatches; $i++){
         print "$matchArray[$i][0] ";
         print "$matchArray[$i][1] vs ";
         print "$matchArray[$i][2] ";
         print "$matchArray[$i][3]\n";
+    #this is where I will grab the data from files per match
+    #for the time being i will use fake data for each match
+        if($matchArray[$i][1] eq "MTL")
+        {
+            @home=@MTL1981;
+        }
+        if($matchArray[$i][1] eq "OTS")
+        {
+            @home=@OTS1990;
+        }
+        if($matchArray[$i][1] eq "NYR")
+        {
+            @home=@NYR1988;
+        }
+        if($matchArray[$i][3] eq "MTL")
+        {
+            @away=@MTL1981;
+        }
+        if($matchArray[$i][3] eq "OTS")
+        {
+            @away=@OTS1990;
+        }
+        if($matchArray[$i][3] eq "NYR")
+        {
+            @away=@NYR1988;
+        }
+        
+        @homef= $home[0];
+        @homea= $home[1];
+
+        @awayf= $away[0];
+        @awaya= $away[1];
+
+        $curQuart= &checkQuart($i,$numMatches);
+        
+        $results[$i] = &calcWinner(\@homef,\@homea,\@awayf,\@awaya,$curQuart);
     }
 
+    foreach(@results)
+    {
+        print "$_\n";
+    }
+     
     return 0;
 
 
+}
+
+sub checkQuart{
+    my $currentGame = $_[0];
+    my $totalGames = $_[1];
+    my $quarterSize;
+    my $i;
+    my $currentQuarter = 1;
+    
+    #multiply by 4 to generate even quarters
+    $currentGame *= 4;
+
+    $quarterSize = $totalGames;
+
+    #multiply by 4 to generate even quarters
+    $totalGames *= 4;
+    
+    for($i = $quarterSize; $i < $totalGames; $i+=$quarterSize){
+        if($currentGame <= $i){
+            return $currentQuarter;
+        }
+        $currentQuarter ++;
+    }
+
+    return 0;
 }
 
 
@@ -189,7 +286,8 @@ sub calcWinner{
     my @Team1a= @{$_[1]};
     my @Team2f= @{$_[2]};
     my @Team2a= @{$_[3]};
-    
+    my $gameNum = $_[4]; 
+
     my @quart1f= quarterly(\@Team1f); 
     my @quart1a= quarterly(\@Team1a);
     my @quart2f= quarterly(\@Team2f);
