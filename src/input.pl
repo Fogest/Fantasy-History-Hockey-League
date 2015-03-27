@@ -34,7 +34,7 @@ sub getTeamYear
 }
 
 # IN: Year, Team abbreviation
-# OUT: Results of games the team played in
+# OUT: Results of games the team played in in the format [called team, their score, team they're against, that team's score]
 sub resultsInfo
 {
    my $year = @_[0];
@@ -59,13 +59,20 @@ sub resultsInfo
       chomp ($playerRecord);
       if ( $csvResults->parse($resultsRecord) ) {
          my @ResultsFields = $csvResults->fields();
-         if (($resultsRecord[2] eq $teamAbbr) || ($resultsRecord[5] eq $teamAbbr))
+         if (($resultsRecord[2] eq $teamAbbr))
          {
-            $teamResults[i][0] = $resultsRecord[3];
-            $teamResults[i][1] = $resultsRecord[6];
-            $teamResults[i][2] = $resultsRecord[6];
-            $teamResults[i][3] = $resultsRecord[3];
+            $teamResults[i][0] = $resultsRecord[2];
+            $teamResults[i][1] = $resultsRecord[3];
+            $teamResults[i][2] = $resultsRecord[5];
+            $teamResults[i][3] = $resultsRecord[6];
             $i++;
+         }
+         else if ($resultsRecord[5] eq $teamAbbr)
+         {
+            $teamResults[i][0] = $resultsRecord[5];
+            $teamResults[i][1] = $resultsRecord[6];
+            $teamResults[i][2] = $resultsRecord[2];
+            $teamResults[i][3] = $resultsRecord[3];
          }
       }
    }
