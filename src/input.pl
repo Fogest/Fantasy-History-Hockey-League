@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+# IN: Year
 sub getTeamYear
 {
    my $teamYear = @_ [0];
@@ -32,50 +33,41 @@ sub getTeamYear
    @teamNames;
 }
 
-sub information
+# IN: Year, Team abbreviation
+# OUT: Results of games the team played in
+sub resultsInfo
 {
+   my $year = @_[0];
+
    use Text::CSV;
    my $csvResults = Text::CSV->new({ sep_char => ',' });
 
-   if ($#ARGV != 1 ) {
-      print "Usage: Just the Perl file.";
-      exit;
-   }
-
-
-   my $year              = 1950;
-   my @players;
    my @results;
-   my @teams;
 
    #
-   #  Open the scoring file and master file - assign a file handle
+   #  Open the results file - assign a file handle
    #
    open my $resultsFH, '<', ..\data\$year\results.csv
       or die "Unable to open results file";
-
 
    my $resultsRecord = <$resultsFH>;
 
    my $i = 0;
 
+   #Saves the game info if the team played in that game
    while( $resultsRecord = <$resultsFH> ) {
       chomp ($playerRecord);
       if ( $csvResults->parse($resultsRecord) ) {
          my @ResultsFields = $csvResults->fields();
-            if ($resultsRecord[2] eq $teamAbbr)
-            {
-               $teamResults[i][0] = $resultsRecord[3];
-               $teamResults[i][1] = $resultsRecord[6];
-               $i++;
-            }
-            else if  ($resultsRecord[5] eq $teamAbbr)
-            {
-               $teamResults[i][0] = $resultsRecord[6];
-               $teamResults[i][1] = $resultsRecord[3];
-               $i++;
-            }
+         if (($resultsRecord[2] eq $teamAbbr) || ($resultsRecord[5] eq $teamAbbr))
+         {
+            $teamResults[i][0] = $resultsRecord[3];
+            $teamResults[i][1] = $resultsRecord[6];
+            $teamResults[i][2] = $resultsRecord[6];
+            $teamResults[i][3] = $resultsRecord[3];
+            $i++;
          }
       }
    }
+   @resultsRecord;
 }
