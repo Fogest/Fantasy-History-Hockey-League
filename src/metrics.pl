@@ -29,67 +29,67 @@ my @matchArray=(
 my @plusMinus1;
 my @plusMinus2;
 #############
-@plusMinus1 =&calcPM(\@MTLa,\@MTLf);
-print "plusMinus1: \n";
-foreach (@plusMinus1){
-    print $_,"\n";
-};
+#@plusMinus1 =&calcPM(\@MTLa,\@MTLf);
+#print "plusMinus1: \n";
+#foreach (@plusMinus1){
+#    print $_,"\n";
+#};
 
-@plusMinus2 =&calcPM(\@OTSa,\@OTSf);
-print "plusMinus2: \n";
-foreach (@plusMinus2){
-    print $_,"\n";
-};
+#@plusMinus2 =&calcPM(\@OTSa,\@OTSf);
+#print "plusMinus2: \n";
+#foreach (@plusMinus2){
+#    print $_,"\n";
+#};
 
-my @quart1;
-my @quart2;
+#my @quart1;
+#my @quart2;
 
-@quart1 = &quarterly(\@MTLf);
-print "quartely offence: \n";
-foreach(@quart1)
-{
-    print $_,"\n";
-}
+#@quart1 = &quarterly(\@MTLf);
+#print "quartely offence: \n";
+#foreach(@quart1)
+#{
+#    print $_,"\n";
+#}
+#
+#
+#@quart2 = &quarterly(\@MTLa);
+#print "quartely defence: \n";
+#foreach(@quart2)
+#{
+#    print $_,"\n";
+#}
+#
+#
+#my $random;
 
+#$random = roulette(20,5,1);
 
-@quart2 = &quarterly(\@MTLa);
-print "quartely defence: \n";
-foreach(@quart2)
-{
-    print $_,"\n";
-}
+#print "random: $random \n";
 
+#my $win;
+#my @score;
 
-my $random;
+#$win =&calcWinner(\@MTLf,\@MTLa,\@OTSf,\@OTSa);
 
-$random = roulette(20,5,1);
-
-print "random: $random \n";
-
-my $win;
-my @score;
-
-$win =&calcWinner(\@MTLf,\@MTLa,\@OTSf,\@OTSa);
-
-if($win == 1)
-{
-    print"Team 1 wins\n";
-    @score = genScore(\@MTLf,\@MTLa);
-    print "Goals: $score[0], Against: $score[1]\n";
-}
-
-if($win == 2)
-{
-    print"Team 2 wins\n";
-    @score = genScore(\@OTSf,\@OTSa);
-    print "Goals: $score[0], Against: $score[1]\n";
-}
-
-if($win == 0)
-{
-    print"draw?\n";
-}
-
+#if($win == 1)
+#{
+#    print"Team 1 wins\n";
+#    @score = genScore(\@MTLf,\@MTLa);
+#    print "Goals: $score[0], Against: $score[1]\n";
+#}
+#
+#if($win == 2)
+#{
+#    print"Team 2 wins\n";
+#    @score = genScore(\@OTSf,\@OTSa);
+#    print "Goals: $score[0], Against: $score[1]\n";
+#}
+#
+#if($win == 0)
+#{
+#    print"draw?\n";
+#}
+#
 loopMatches(\@matchArray);
 
 sub loopMatches{
@@ -160,14 +160,14 @@ sub loopMatches{
             @away=@NYR1988;
         }
         
-        @homef= $home[0];
-        @homea= $home[1];
+        @homef= @{$home[0]};
+        @homea= @{$home[1]};
 
-        @awayf= $away[0];
-        @awaya= $away[1];
-
-        $curQuart= &checkQuart($i,$numMatches);
+        @awayf= @{$away[0]};
+        @awaya= @{$away[1]};
         
+        $curQuart= &checkQuart($i,$numMatches);
+        print "current quarter: $curQuart\n"; 
         $results[$i] = &calcWinner(\@homef,\@homea,\@awayf,\@awaya,$curQuart);
     }
 
@@ -196,8 +196,8 @@ sub checkQuart{
     #multiply by 4 to generate even quarters
     $totalGames *= 4;
     
-    for($i = $quarterSize; $i < $totalGames; $i+=$quarterSize){
-        if($currentGame <= $i){
+    for($i = $quarterSize; $i <= $totalGames; $i+=$quarterSize){
+        if($currentGame < $i){
             return $currentQuarter;
         }
         $currentQuarter ++;
@@ -223,22 +223,38 @@ sub calcPM{
     return @pM;
 }
 
+#calculates the quarterly averges and returns them in an array(av1,av2,av3,av4)
 sub quarterly{
-    my (@quart) = @{$_[0]};
-    my @avg;
-    my $numGames = $#quart+1; 
-    my $i=0;
+    my (@scoreArray) = @{$_[0]};
+    my @avgArray;
+    my $numGames = $#scoreArray+1; 
+    my $cQuart=0;
     my $k=0;
-    my $qLength =$numGames/4;
+    my $countNumScores=0;
+    my $addToQuarter = $numGames%4;
+    my @addToQ= (0,0,0,0);
+    my $actualQLength;      
+    my $lastValue=0;
+    my $avgQLength =(($numGames-($numGames%4))/4);
     
-    for($i=0;$i<4;$i++)
-    {
-        for($k=$qLength*($i);($k<$numGames) && ($k<$qLength*($i+1));$k++){ 
-            $avg[$i] += $quart[$k]; 
-        }
-        $avg[$i]=int($avg[$i]/$qLength);
+    for($k=0; $k<$addToQuarter; $k++){
+        $addToQ[$k]=1;
     }
-    return @avg;
+    
+    for($cQuart=0;$cQuart<4;$cQuart++){
+        #for each quarter, find the average
+        $countNumScores = 0;
+        $avgArray[$cQuart] = 0;
+        $actualQLength = (($cQuart+1) *$avgQLength)+$addToQ[$cQuart];
+        for($k = $lastValue; $k<$actualQLength; $k++){
+            $avgArray[$cQuart] += $scoreArray[$k];
+            $countNumScores++;
+        }
+
+        $lastValue= $actualQLength;
+        $avgArray[$cQuart] = int($avgArray[$cQuart] / $countNumScores);
+    }
+    return @avgArray;
 }
 
 sub roulette{
@@ -265,17 +281,26 @@ sub compareQ{
     my $qNum = $_[2];
     my $i;
 
-    if($qNum > 0 && $qNum < 4)
+    if($qNum > 0 && $qNum < 5)
     {
         $qNum--;
+        
+        print "$quart1[$qNum] vs $quart2[$qNum]\n";
 
-        if(int(rand($quart1[$qNum])+1) > int(rand($quart2[$qNum])+1))
+        if($quart1[$qNum] > $quart2[$qNum])
         {
+            #team 1 is higher
             return 1;
+        }
+        if($quart1[$qNum] < $quart2[$qNum])
+        {
+            #team 2 is Higher
+            return 2;
         }
         else
         {
-            return 2;
+            #equal
+            return 0;
         }
     }
             
@@ -286,26 +311,68 @@ sub calcWinner{
     my @Team1a= @{$_[1]};
     my @Team2f= @{$_[2]};
     my @Team2a= @{$_[3]};
-    my $gameNum = $_[4]; 
-
+    my $quartNum = $_[4]; 
+    
     my @quart1f= quarterly(\@Team1f); 
     my @quart1a= quarterly(\@Team1a);
     my @quart2f= quarterly(\@Team2f);
     my @quart2a= quarterly(\@Team2a);
-    
-    my $winnera = 0; 
-    my $winnerf = 0;
-    
-    $winnera = compareQ(\@quart1a,\@quart2a,3);
-    $winnerf = compareQ(\@quart1f,\@quart2f,3);
+   
+    my $betterAttack = 0; 
+    my $weakerDefence = 0;
+    print"for: ";    
+    $betterAttack = compareQ(\@quart1f,\@quart2f,$quartNum);
+    print"against: ";
+    $weakerDefence = compareQ(\@quart1a,\@quart2a,$quartNum);
 
-    if($winnera == $winnerf)
-    {
-        return $winnera;
+    if($betterAttack == 1){
+        if($weakerDefence == 2){
+            #team 1 is much stronger
+            return 1;
+        }
+        if($weakerDefence == 0)
+        {
+            #team 1 is stronger offence
+            return 1;
+        }
+        if($weakerDefence == 1)
+        {
+            #team 1 has good offence but weak defence
+            return 3;
+        }
+    }
+    if($betterAttack == 2){
+        if($weakerDefence == 1){
+            #team 2 is much stronger
+            return 2;
+        }
+        if($weakerDefence == 0)
+        {
+            #team 2 is stronger offence
+            return 2;
+        }
+        if($weakerDefence == 1)
+        {
+            #team 2 has good offence but weak defence
+            return 4;
+        }
     }
     else
     {
-        return 0;
+        if($weakerDefence == 1){
+            #team 1 has a better defence
+            return 1;
+        }
+        if($weakerDefence == 2)
+        {
+            #team 2 has a better defence
+            return 2;
+        }
+        if($weakerDefence == 0)
+        {
+            #both teams seem evenly matched
+            return 5;
+        }
     }
 }  
 
