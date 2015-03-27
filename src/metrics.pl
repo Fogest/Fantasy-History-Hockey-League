@@ -15,20 +15,20 @@ my @OTS = (@OTSf,@OTSa);
 ######simulate justin's array pass##############
 #my @matchSyntax = (homeYear,homeTeam,awayYear,awayTeam);
 my @matchArray=(
-     [1981,"MTL",1990,"OTS"],
-     [1990,"OTS",1988,"NYR"],
-     [1988,"NYR",1981,"MTL"],
-     [1981,"MTL",1990,"OTS"],
-     [1988,"NYR",1981,"MTL"],
-     [1990,"OTS",1988,"NYR"],
-     [1981,"MTL",1988,"NYR"],
-     [1988,"NYR",1990,"OTS"],
+    [1981,"MTL",1990,"OTS"],
+    [1990,"OTS",1988,"NYR"],
+    [1988,"NYR",1981,"MTL"],
+    [1981,"MTL",1990,"OTS"],
+    [1988,"NYR",1981,"MTL"],
+    [1990,"OTS",1988,"NYR"],
+    [1981,"MTL",1988,"NYR"],
+    [1988,"NYR",1990,"OTS"],
      );
 
 ######################
 my @plusMinus1;
 my @plusMinus2;
-#############
+#############code used in testing###########
 #@plusMinus1 =&calcPM(\@MTLa,\@MTLf);
 #print "plusMinus1: \n";
 #foreach (@plusMinus1){
@@ -89,11 +89,14 @@ my @plusMinus2;
 #{
 #    print"draw?\n";
 #}
-#
+#############end of code used in testing################
 loopMatches(\@matchArray);
 
+#loops through the schedule of matches and calculates the winners
 sub loopMatches{
+#get input
     my @matchArray = @{$_[0]};
+#declare variables
     my $numMatches = $#matchArray+1;
     my $i;
     my $curQuart;
@@ -160,17 +163,22 @@ sub loopMatches{
             @away=@NYR1988;
         }
         
+        #this is the only way i understand how to make this bit work
+        #basically used to break the array up into smaller parts to pass to subs
         @homef= @{$home[0]};
         @homea= @{$home[1]};
 
         @awayf= @{$away[0]};
         @awaya= @{$away[1]};
         
+        #get current quarter
         $curQuart= &checkQuart($i,$numMatches);
         print "current quarter: $curQuart\n"; 
+        #calculate the winners and store in array         
         $results[$i] = &calcWinner(\@homef,\@homea,\@awayf,\@awaya,$curQuart);
     }
-
+    
+    #print the results    
     foreach(@results)
     {
         print "$_\n";
@@ -181,9 +189,12 @@ sub loopMatches{
 
 }
 
+#determines which quarter we are currently in and returns it (1..4)
 sub checkQuart{
+#get input
     my $currentGame = $_[0];
     my $totalGames = $_[1];
+#declare variables
     my $quarterSize;
     my $i;
     my $currentQuarter = 1;
@@ -196,6 +207,7 @@ sub checkQuart{
     #multiply by 4 to generate even quarters
     $totalGames *= 4;
     
+    #loop through the quarters and return when we find which quarter we are within
     for($i = $quarterSize; $i <= $totalGames; $i+=$quarterSize){
         if($currentGame < $i){
             return $currentQuarter;
@@ -203,6 +215,7 @@ sub checkQuart{
         $currentQuarter ++;
     }
 
+    #this indicates there was some error
     return 0;
 }
 
@@ -223,40 +236,59 @@ sub calcPM{
     return @pM;
 }
 
-#calculates the quarterly averges and returns them in an array(av1,av2,av3,av4)
+#calculates the quarterly averages and returns them in an array(av1,av2,av3,av4)
 sub quarterly{
+#get the input
     my (@scoreArray) = @{$_[0]};
+#declare variables
     my @avgArray;
     my $numGames = $#scoreArray+1; 
     my $cQuart=0;
     my $k=0;
     my $countNumScores=0;
+    #this tells me how much i need to displace my quarters
+    #it will be either 1, 2, 3 or 0
     my $addToQuarter = $numGames%4;
+    #used to modify quarters, initialized to prevent strange behavior
     my @addToQ= (0,0,0,0);
     my $actualQLength;      
     my $lastValue=0;
+    #the even lenth of each quarter
+    #removes up to 3 games from the length in order to maintain whole numbers
     my $avgQLength =(($numGames-($numGames%4))/4);
     
+    #for every game removed from the season, assign 1 to be added to a quarter
+    #Quarters 1, 2,and 3 can have up to 1 game added to them
     for($k=0; $k<$addToQuarter; $k++){
         $addToQ[$k]=1;
     }
     
+    #this is where we get the quarterly averages
     for($cQuart=0;$cQuart<4;$cQuart++){
-        #for each quarter, find the average
+        #for each quarter
+        #count the number of scores we encounter
         $countNumScores = 0;
+        #initialize the array value to 0 to prevent strange behavior;
         $avgArray[$cQuart] = 0;
+        #calculate how long the quarter actually is by:
+            #multiplying avg quarter length by the current quarter we are in
+            #adding any extra games to the quarter
         $actualQLength = (($cQuart+1) *$avgQLength)+$addToQ[$cQuart];
+        #loop through the quarter and sum all the scores
         for($k = $lastValue; $k<$actualQLength; $k++){
             $avgArray[$cQuart] += $scoreArray[$k];
             $countNumScores++;
         }
-
+        #save the lastPosition we checked to use as starting pos for next iteration
         $lastValue= $actualQLength;
+        #calculate average score rounded to nearest whole int;
         $avgArray[$cQuart] = int($avgArray[$cQuart] / $countNumScores);
     }
+    
     return @avgArray;
 }
 
+#plays roullete to generate random scores
 sub roulette{
 
     my ($max,$median,$min) = @_;
@@ -274,19 +306,24 @@ sub roulette{
     return $random;
 }
 
+#compares two quarterly averages to determine which is higher
 sub compareQ{
-
+#get input
     my @quart1 = @{$_[0]};
     my @quart2 = @{$_[1]};
     my $qNum = $_[2];
+#declare variables
     my $i;
-
+    
+    #ensure valid quarter was passed to function
     if($qNum > 0 && $qNum < 5)
     {
-        $qNum--;
+        #get the array index corresponding to that quarter
+        $qNum--; 
         
         print "$quart1[$qNum] vs $quart2[$qNum]\n";
 
+        #compare quarters to determine which is higher  
         if($quart1[$qNum] > $quart2[$qNum])
         {
             #team 1 is higher
@@ -303,28 +340,46 @@ sub compareQ{
             return 0;
         }
     }
-            
+    else
+    {
+        #error
+        return -1;
+    }
 }
 
+#checks which team should win based on their offensive and defensive strengths
+#returns a number corresponding to which team is stronger
+#return value key
+#------------------------------
+# 1 : team 1 is stronger overall
+# 2 : team 2 is stronger overall
+# 3 : team 1 is stronger offensively, but weaker defensively
+# 4 : team 2 is stronger offensively, but weaker defensively
+# 5 : teams are evenly matched
 sub calcWinner{
+#get input
     my @Team1f= @{$_[0]};
     my @Team1a= @{$_[1]};
     my @Team2f= @{$_[2]};
     my @Team2a= @{$_[3]};
     my $quartNum = $_[4]; 
+#declare variables    
+    my $betterAttack = 0; 
+    my $weakerDefence = 0;
     
     my @quart1f= quarterly(\@Team1f); 
     my @quart1a= quarterly(\@Team1a);
     my @quart2f= quarterly(\@Team2f);
     my @quart2a= quarterly(\@Team2a);
    
-    my $betterAttack = 0; 
-    my $weakerDefence = 0;
-    print"for: ";    
+    print"for: ";
+    #compare offensive strength
     $betterAttack = compareQ(\@quart1f,\@quart2f,$quartNum);
     print"against: ";
+    #compare defensice strength
     $weakerDefence = compareQ(\@quart1a,\@quart2a,$quartNum);
 
+    #based on offensive and defensive strengths, determine a winner
     if($betterAttack == 1){
         if($weakerDefence == 2){
             #team 1 is much stronger
@@ -376,6 +431,8 @@ sub calcWinner{
     }
 }  
 
+
+#generate realistic scores based on match outcome and average team performance
 sub genScore{
     my @Teamf= @{$_[0]};
     my @Teama= @{$_[0]};
