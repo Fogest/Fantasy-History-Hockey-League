@@ -7,12 +7,25 @@ use warnings;
 #####testing fake info
 my @teamNames=("MTL","OTS");
 my @MTLa=(2,1,4,0,4,2,2,3,3,3,3,1,2,3,11,11);
-my @MTLf=(1,1,1,2,2,2,1,1,1,3,3,3,4,4,4,100,1);
+my @MTLf=(1,1,1,2,2,2,1,1,1,3,3,3,4,4,4,1,1);
 my @MTL = (@MTLf,@MTLa);
 my @OTSa=(3,3,3,3,3,3,3,3,3);
 my @OTSf=(2,2,2,2,2,1,0,1,0);
 my @OTS = (@OTSf,@OTSa);
-####################
+######simulate justin's array pass##############
+#my @matchSyntax = (homeYear,homeTeam,awayYear,awayTeam);
+my @matchArray=(
+     [1981,"MTL",1990,"OTS"],
+     [1990,"OTS",1988,"NYR"],
+     [1988,"NYR",1981,"MTL"],
+     [1981,"MTL",1990,"OTS"],
+     [1988,"NYR",1981,"MTL"],
+     [1990,"OTS",1988,"NYR"],
+     [1981,"MTL",1988,"NYR"],
+     [1988,"NYR",1990,"OTS"],
+     );
+
+######################
 my @plusMinus1;
 my @plusMinus2;
 #############
@@ -76,6 +89,26 @@ if($win == 0)
 {
     print"draw?\n";
 }
+
+loopMatches(\@matchArray);
+
+sub loopMatches{
+    my @matchArray = @{$_[0]};
+    my $numMatches = $#matchArray+1;
+    my $i;
+    print"SCHEDULE: \n";
+    for( $i = 0; $i<$numMatches; $i++){
+        print "$matchArray[$i][0] ";
+        print "$matchArray[$i][1] vs ";
+        print "$matchArray[$i][2] ";
+        print "$matchArray[$i][3]\n";
+    }
+
+    return 0;
+
+
+}
+
 
 sub calcPM{
 #calculates the PlusMinus of a team given the scores that team made
