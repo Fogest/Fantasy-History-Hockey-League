@@ -30,6 +30,8 @@ sub getTeamYear
          }
       }
    }
+   close $teamsFH
+      or warn "Unable to close teams.csv in folder $year, during sub getTeamYear.";
    @teamNames;
 }
 
@@ -76,6 +78,8 @@ sub resultsInfo
          }
       }
    }
+   close $resultsFH
+      or warn "Unable to close results.csv in folder $year during sub resultsInfo";
    @resultsRecord;
 }
 
@@ -94,5 +98,10 @@ sub playersInfo
    open my $playersFH, '<', "../data/$year/players.csv"
       or die "Unable to open results file";
 
-   my $resultsRecord = <$resultsFH>;   
+   my $resultsRecord = <$resultsFH>;
+
+
+
+   close $playersFH
+      or warn "Unable to close players.csv in folder $year during sub playersInfo";   
 }
