@@ -75,6 +75,7 @@ sub resultsInfo
             $teamResults[i][1] = $resultsRecord[6];
             $teamResults[i][2] = $resultsRecord[2];
             $teamResults[i][3] = $resultsRecord[3];
+            $i++;
          }
       }
    }
@@ -98,7 +99,7 @@ sub playersInfo
    open my $playersFH, '<', "../data/$year/players.csv"
       or die "Unable to open results file";
 
-   my $resultsRecord = <$resultsFH>;
+   my $playerRecord = <$playerFH>;
 
 
 
