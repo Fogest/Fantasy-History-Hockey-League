@@ -58,7 +58,7 @@ sub resultsInfo
 
    #Saves the game info if the team played in that game
    while( $resultsRecord = <$resultsFH> ) {
-      chomp ($playerRecord);
+      chomp ($resultsRecord);
       if ( $csvResults->parse($resultsRecord) ) {
          my @ResultsFields = $csvResults->fields();
          if (($resultsRecord[2] eq $teamAbbr))
@@ -101,7 +101,21 @@ sub playersInfo
 
    my $playerRecord = <$playerFH>;
 
+my $i = 0;
 
+   #Saves the game info if the team played in that game
+   while( $playerRecord = <$resultsFH> ) {
+      chomp ($playerRecord);
+      if ( $csvResults->parse($playerRecord) ) {
+         my @ResultsFields = $csvResults->fields();
+         if (($playerRecord[2] eq $teamAbbr))
+         {
+         }
+         else if ($playerRecord[5] eq $teamAbbr)
+         {
+         }
+      }
+   }
 
    close $playersFH
       or warn "Unable to close players.csv in folder $year during sub playersInfo";   
