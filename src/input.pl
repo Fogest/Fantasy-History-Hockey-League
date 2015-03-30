@@ -140,18 +140,43 @@ sub playersInfo
 
    my $playerRecord = <$playersFH>;
 
-my $i = 0;
+   my $i = 0;
+
+   for (my $j = 0; $j <= 11; $j++) {
+      $players[$j] = 0;
+   }
 
    #Saves the game info if the team played in that game
    while( $playerRecord = <$playersFH> ) {
       chomp ($playerRecord);
       if ( $csvPlayers->parse($playerRecord) ) {
-         my @ResultsFields = $csvPlayers->fields();
-         if (($ResultsFields[2] eq $teamAbbr))
+         my @playersFields = $csvPlayers->fields();
+         if (( $playersFields[3] eq $teamAbbr))
          {
-         }
-         if ($ResultsFields[5] eq $teamAbbr)
-         {
+            for (my $k = 0; $k<=15; $k++)
+            {
+              if ($playersFields[7+$k] > 0)
+              {
+                $players[0] += $playersFields[7+$k];
+              }
+            }
+            #$players[0] += $playersFields[7]; #goals
+            #$players[1] += $playersFields[8]; #assists
+            #$players[2] += $playersFields[9]; #points
+           # $players[3] += $playersFields[10]; #plus/minus
+          #  $players[4] += $playersFields[11]; #penalty minutes
+         #   $players[5] += $playersFields[12]; #even strength goals
+        #    $players[6] += $playersFields[13]; #pwrplay goals
+       #     $players[7] += $playersFields[14]; #shrthnd goals
+      #      $players[8] += $playersFields[15]; #game winning pts
+     #       $players[9] += $playersFields[16]; #even strength assists
+    #        $players[10] += $playersFields[17]; #power play assists
+   #         $players[11] += $playersFields[18]; #shrthnd assists
+  #          $players[12] += $playersFields[19]; #shots
+ #           $players[13] += $playersFields[20]; #shooting %
+#            $players[14] += $playersFields[21]; #time on ice
+#            $players[15] += $playersFields[22]; #avg time on ice
+            $i ++; 
          }
       }
    }
