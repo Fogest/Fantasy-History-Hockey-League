@@ -1,11 +1,52 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Text::CSV;
+
+
+###############testing code####################
+print"enter year:";
+my $input = <>;
+chomp($input);
+my @resultY=&getTeamYear($input);
+
+print "TEAMS IN YEAR: \n";
+print "-------------------\n";
+foreach(@resultY)
+{
+    print "team: ";
+    foreach(@$_)
+    {
+        print "$_ ";
+    }
+    print "\n";
+}
+
+
+print "RESULTS OF SEASON: \n";
+print "-------------------\n";
+
+#currently only get data for 1 team from the season to display.
+#too long an output if you display multiple.
+
+my @resultT = &resultsInfo($input,$resultY[0][1]);
+
+foreach(@resultT)
+{
+    print"game: ";
+    foreach(@$_)
+    {
+        print"$_ ";
+    }
+    print "\n";
+}
+#######end of testing##################################
+
 
 # IN: Year
 sub getTeamYear
 {
-   my $teamYear = @_ [0];
+   my $teamYear = $_[0];
 
    my $csvTeams= Text::CSV->new({ sep_char => ',' });
 
@@ -25,13 +66,14 @@ sub getTeamYear
          my @TeamsFields = $csvTeams->fields();
          if ($TeamsFields[2] ne "teamAbrv")
          {
-            $teamNames[i] = $TeamsFields[1];
+            $teamNames[$i][0] = $TeamsFields[1];
+            $teamNames[$i][1] = $TeamsFields[2];
             $i++;
          }
       }
    }
    close $teamsFH
-      or warn "Unable to close teams.csv in folder $year, during sub getTeamYear.";
+      or warn "Unable to close teams.csv in folder $teamYear, during sub getTeamYear.";
    @teamNames;
 }
 
@@ -39,56 +81,53 @@ sub getTeamYear
 # OUT: Results of games the team played in in the format [called team, their score, team they're against, that team's score]
 sub resultsInfo
 {
-   my $year = @_[0];
-
-   use Text::CSV;
+   my $year = $_[0];
+   my $teamAbbr = $_[1];      
    my $csvResults = Text::CSV->new({ sep_char => ',' });
-
+   
    my @results;
 
    #
    #  Open the results file - assign a file handle
    #
-   open my $resultsFH, '<', "../data/$teamYear/teams.csv"
+   open my $resultsFH, '<', "../data/$year/results.csv"
       or die "Unable to open results file";
 
    my $resultsRecord = <$resultsFH>;
-
    my $i = 0;
-
+   my @teamResults;
    #Saves the game info if the team played in that game
    while( $resultsRecord = <$resultsFH> ) {
       chomp ($resultsRecord);
       if ( $csvResults->parse($resultsRecord) ) {
-         my @ResultsFields = $csvResults->fields();
-         if (($resultsRecord[2] eq $teamAbbr))
+         my @resultsField = $csvResults->fields();
+         if (($resultsField[2] eq $teamAbbr))
          {
-            $teamResults[i][0] = $resultsRecord[2];
-            $teamResults[i][1] = $resultsRecord[3];
-            $teamResults[i][2] = $resultsRecord[5];
-            $teamResults[i][3] = $resultsRecord[6];
+            $teamResults[$i][0] = $resultsField[2];
+            $teamResults[$i][1] = $resultsField[3];
+            $teamResults[$i][2] = $resultsField[5];
+            $teamResults[$i][3] = $resultsField[6];
             $i++;
          }
-         else if ($resultsRecord[5] eq $teamAbbr)
+         if ($resultsField[5] eq $teamAbbr)
          {
-            $teamResults[i][0] = $resultsRecord[5];
-            $teamResults[i][1] = $resultsRecord[6];
-            $teamResults[i][2] = $resultsRecord[2];
-            $teamResults[i][3] = $resultsRecord[3];
+            $teamResults[$i][0] = $resultsField[5];
+            $teamResults[$i][1] = $resultsField[6];
+            $teamResults[$i][2] = $resultsField[2];
+            $teamResults[$i][3] = $resultsField[3];
             $i++;
          }
       }
    }
    close $resultsFH
       or warn "Unable to close results.csv in folder $year during sub resultsInfo";
-   @resultsRecord;
+   @teamResults;
 }
 
 sub playersInfo
 {
-   my $year = @_[0];
-
-   use Text::CSV;
+   my $year = $_[0];
+   my $teamAbbr;
    my $csvPlayers = Text::CSV->new({ sep_char => ',' });
 
    my @players;
@@ -99,19 +138,19 @@ sub playersInfo
    open my $playersFH, '<', "../data/$year/players.csv"
       or die "Unable to open results file";
 
-   my $playerRecord = <$playerFH>;
+   my $playerRecord = <$playersFH>;
 
 my $i = 0;
 
    #Saves the game info if the team played in that game
-   while( $playerRecord = <$resultsFH> ) {
+   while( $playerRecord = <$playersFH> ) {
       chomp ($playerRecord);
-      if ( $csvResults->parse($playerRecord) ) {
-         my @ResultsFields = $csvResults->fields();
-         if (($playerRecord[2] eq $teamAbbr))
+      if ( $csvPlayers->parse($playerRecord) ) {
+         my @ResultsFields = $csvPlayers->fields();
+         if (($ResultsFields[2] eq $teamAbbr))
          {
          }
-         else if ($playerRecord[5] eq $teamAbbr)
+         if ($ResultsFields[5] eq $teamAbbr)
          {
          }
       }
