@@ -515,51 +515,54 @@ sub getTeamYear
     @teamNames;
 }
 
-# IN: Year, Team abbreviation
-# OUT: Results of games the team played in in the format [called team, their score, team they're against, that team's score]
+# IN:   $Year, Team abbreviation
+# OUT:  $teamResults [i][0] = called team abbreviation
+#       $teamResults [i][1] = called team score
+#       $teamResults [i][2] = vs team abbreviation
+#       $teamResults [i][3] = vs team score
 sub resultsInfo
 {
-   my $year = $_[0];
-   my $teamAbbr = $_[1];      
-   my $csvResults = Text::CSV->new({ sep_char => ',' });
+    my $year = $_[0];
+    my $teamAbbr = $_[1];      
+    my $csvResults = Text::CSV->new({ sep_char => ',' });
    
-   my @results;
+    my @results;
 
-   #
-   #  Open the results file - assign a file handle
-   #
-   open my $resultsFH, '<', "../data/$year/results.csv"
-      or die "Unable to open results file";
+    #
+    #  Open the results file - assign a file handle
+    #
+    open my $resultsFH, '<', "../data/$year/results.csv"
+        or die "Unable to open results file";
 
-   my $resultsRecord = <$resultsFH>;
-   my $i = 0;
-   my @teamResults;
-   #Saves the game info if the team played in that game
-   while( $resultsRecord = <$resultsFH> ) {
-      chomp ($resultsRecord);
-      if ( $csvResults->parse($resultsRecord) ) {
-         my @resultsField = $csvResults->fields();
-         if (($resultsField[2] eq $teamAbbr))
-         {
-            $teamResults[$i][0] = $resultsField[2];
-            $teamResults[$i][1] = $resultsField[3];
-            $teamResults[$i][2] = $resultsField[5];
-            $teamResults[$i][3] = $resultsField[6];
-            $i++;
-         }
-         if ($resultsField[5] eq $teamAbbr)
-         {
-            $teamResults[$i][0] = $resultsField[5];
-            $teamResults[$i][1] = $resultsField[6];
-            $teamResults[$i][2] = $resultsField[2];
-            $teamResults[$i][3] = $resultsField[3];
-            $i++;
-         }
-      }
-   }
-   close $resultsFH
-      or warn "Unable to close results.csv in folder $year during sub resultsInfo";
-   @teamResults;
+    my $resultsRecord = <$resultsFH>;
+    my $i = 0;
+    my @teamResults;
+    #Saves the game info if the team played in that game
+    while( $resultsRecord = <$resultsFH> ) {
+        chomp ($resultsRecord);
+        if ( $csvResults->parse($resultsRecord) ) {
+            my @resultsField = $csvResults->fields();
+            if (($resultsField[2] eq $teamAbbr))
+            {
+                $teamResults[$i][0] = $resultsField[2];
+                $teamResults[$i][1] = $resultsField[3];
+                $teamResults[$i][2] = $resultsField[5];
+                $teamResults[$i][3] = $resultsField[6];
+                $i++;
+            }
+            if ($resultsField[5] eq $teamAbbr)
+            {
+                $teamResults[$i][0] = $resultsField[5];
+                $teamResults[$i][1] = $resultsField[6];
+                $teamResults[$i][2] = $resultsField[2];
+                $teamResults[$i][3] = $resultsField[3];
+                $i++;
+            }
+        }
+    }
+    close $resultsFH
+        or warn "Unable to close results.csv in folder $year during sub resultsInfo";
+    @teamResults;
 }
 
 #IN:    Year, Team Abbreviation
