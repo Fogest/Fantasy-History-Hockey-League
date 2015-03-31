@@ -8,41 +8,60 @@ use Text::CSV;
 print"enter year:";
 my $input = <>;
 chomp($input);
+
+my @namesOut=&getTeamYear($input);
+
+my $namesSize1 = scalar @{namesOut};
+my $namesSize2 = scalar @{$namesOut[0]};
+
+print "These teams played that year:\n";
+
+for (my $g = 0; $g < $namesSize1; $g ++)
+{
+    for (my $h = 0; $h < $namesSize2; $h ++)
+    {
+        print "$namesOut[$g][$h] \t";
+    }
+    print"\n";
+}
+
 print"Enter team abbrv: ";
 my $inputAbbr = <>;
 chomp($inputAbbr);
+
 my @playersOut=&playersInfo($input,$inputAbbr);
 
-#print "TEAMS IN YEAR: \n";
-#print "-------------------\n";
+print "\nInfo from players.csv:\n";
+
+my $c = 0;
 foreach(@playersOut)
 {
-    print "team: ";
+    print "Value $c:\t";
     foreach($_)
     {
         print "$_ ";
     }
     print "\n";
+    $c++;
 }
 
 
-#print "RESULTS OF SEASON: \n";
-#print "-------------------\n";
+my @resultsOut=&resultsInfo($input,$inputAbbr);
 
-#currently only get data for 1 team from the season to display.
-#too long an output if you display multiple.
+my $resultsSize1 = scalar @{resultsOut};
+my $resultsSize2 = scalar @{$resultsOut[0]};
 
-#my @resultT = &resultsInfo($input,$resultY[0][1]);
+print "\nInfo from results.csv:\n";
 
-#foreach(@resultT)
-#{
-#    print"game: ";
-#    foreach(@$_)
-#    {
-#        print"$_ ";
-#    }
-#    print "\n";
-#}
+for (my $e = 0; $e < $resultsSize1; $e ++)
+{
+    for (my $f = 0; $f < $resultsSize2; $f ++)
+    {
+        print "$resultsOut[$e][$f] ";
+    }
+    print"\n";
+}
+
 #######end of testing##################################
 
 
@@ -164,7 +183,7 @@ sub playersInfo
 
     my $i = 0;
 
-    for (my $j = 0; $j <= 11; $j++) {
+    for (my $j = 0; $j <= 16; $j++) {
         $players[$j] = 0;
     }
 
@@ -177,11 +196,11 @@ sub playersInfo
             my @playersFields = $csvPlayers->fields();
             if (( $playersFields[3] eq $teamAbbr))
             {
-                for (my $k = 0; $k<=15; $k++)
+                for (my $k = 0; $k<=16; $k++)
                 {
-                    if ((defined $playersFields[7+$k]) && ($playersFields[7+$k] ne ""))
+                    if ((defined $playersFields[7+$k]) && ($playersFields[6+$k] ne ""))
                     {
-                        $players[$k] += $playersFields[7+$k];
+                        $players[$k] += $playersFields[6+$k];
                     }
                 }
                 $i ++; 
@@ -193,7 +212,7 @@ sub playersInfo
         print "Team did not play that year\n";
         return;
     }
-    for (my $k = 0; $k<=15; $k++)
+    for (my $k = 0; $k<=16; $k++)
     {
         if (defined $players[$k])
         {
