@@ -8,14 +8,17 @@ use Text::CSV;
 print"enter year:";
 my $input = <>;
 chomp($input);
-my @resultY=&getTeamYear($input);
+print"Enter team abbrv: ";
+my $inputAbbr = <>;
+chomp($inputAbbr);
+my @playersOut=&playersInfo($input,$inputAbbr);
 
-print "TEAMS IN YEAR: \n";
-print "-------------------\n";
-foreach(@resultY)
+#print "TEAMS IN YEAR: \n";
+#print "-------------------\n";
+foreach(@playersOut)
 {
     print "team: ";
-    foreach(@$_)
+    foreach($_)
     {
         print "$_ ";
     }
@@ -23,58 +26,59 @@ foreach(@resultY)
 }
 
 
-print "RESULTS OF SEASON: \n";
-print "-------------------\n";
+#print "RESULTS OF SEASON: \n";
+#print "-------------------\n";
 
 #currently only get data for 1 team from the season to display.
 #too long an output if you display multiple.
 
-my @resultT = &resultsInfo($input,$resultY[0][1]);
+#my @resultT = &resultsInfo($input,$resultY[0][1]);
 
-foreach(@resultT)
-{
-    print"game: ";
-    foreach(@$_)
-    {
-        print"$_ ";
-    }
-    print "\n";
-}
+#foreach(@resultT)
+#{
+#    print"game: ";
+#    foreach(@$_)
+#    {
+#        print"$_ ";
+#    }
+#    print "\n";
+#}
 #######end of testing##################################
 
 
-# IN: Year
+#IN:    Year
+#OUT:   Abbrv of teams that played that year
 sub getTeamYear
 {
-   my $teamYear = $_[0];
+    my $teamYear = $_[0];
 
-   my $csvTeams= Text::CSV->new({ sep_char => ',' });
+    my $csvTeams= Text::CSV->new({ sep_char => ',' });
 
-   open my $teamsFH, '<', "../data/$teamYear/teams.csv"
-      or die "Unable to open teams file in $teamYear folder.";
+    open my $teamsFH, '<', "../data/$teamYear/teams.csv"
+        or die "Unable to open teams file in $teamYear folder.";
 
-   my $teamsRecord = <$teamsFH>;
+    my $teamsRecord = <$teamsFH>;
 
-   my @teamNames;
+    my @teamNames;
 
-   my $i = 0;
+    my $i = 0;
 
-   while( $teamsRecord = <$teamsFH> ) {
-      chomp ($teamsRecord);
-      if ( $csvTeams->parse($teamsRecord) ) 
-      {
-         my @TeamsFields = $csvTeams->fields();
-         if ($TeamsFields[2] ne "teamAbrv")
-         {
-            $teamNames[$i][0] = $TeamsFields[1];
-            $teamNames[$i][1] = $TeamsFields[2];
-            $i++;
-         }
-      }
-   }
-   close $teamsFH
-      or warn "Unable to close teams.csv in folder $teamYear, during sub getTeamYear.";
-   @teamNames;
+    while( $teamsRecord = <$teamsFH> ) {
+        chomp ($teamsRecord);
+        if ( $csvTeams->parse($teamsRecord) ) 
+        {
+             my @TeamsFields = $csvTeams->fields();
+            if ($TeamsFields[2] ne "teamAbrv")
+            {
+                $teamNames[$i][0] = $TeamsFields[1];
+                $teamNames[$i][1] = $TeamsFields[2];
+                $i++;
+            }
+        }
+    }
+    close $teamsFH
+          or warn "Unable to close teams.csv in folder $teamYear, during sub getTeamYear.";
+    @teamNames;
 }
 
 # IN: Year, Team abbreviation
@@ -124,63 +128,80 @@ sub resultsInfo
    @teamResults;
 }
 
+#IN:    Year, Team Abbreviation
+#OUT:   $players[0]  = goals
+#       $players[1]  = assists
+#       $players[2]  = points
+#       $players[3]  = plus/minus
+#       $players[4]  = penalty minutes
+#       $players[5]  = even strength goals
+#       $players[6]  = pwrplay goals
+#       $players[7]  = shorthand goals
+#       $players[8]  = game winning pts
+#       $players[9]  = even strength assists
+#       $players[10] = power play assists
+#       $players[11] = shorthand assists
+#       $players[12] = shots
+#       $players[13] = shooting %
+#       $players[14] = time on ice
+#       $players[15] = avg time on ice
+
 sub playersInfo
 {
-   my $year = $_[0];
-   my $teamAbbr;
-   my $csvPlayers = Text::CSV->new({ sep_char => ',' });
+    my $year = $_[0];
+    my $teamAbbr = $_[1];
+    my $csvPlayers = Text::CSV->new({ sep_char => ',' });
 
-   my @players;
+    my @players;
 
-   #
-   #  Open the results file - assign a file handle
-   #
-   open my $playersFH, '<', "../data/$year/players.csv"
-      or die "Unable to open results file";
+    #
+    #  Open the results file - assign a file handle
+    #
+    open my $playersFH, '<', "../data/$year/players.csv"
+        or die "Unable to open results file";
 
-   my $playerRecord = <$playersFH>;
+    my $playerRecord = <$playersFH>;
 
-   my $i = 0;
+    my $i = 0;
 
-   for (my $j = 0; $j <= 11; $j++) {
-      $players[$j] = 0;
-   }
+    for (my $j = 0; $j <= 11; $j++) {
+        $players[$j] = 0;
+    }
 
-   #Saves the game info if the team played in that game
-   while( $playerRecord = <$playersFH> ) {
-      chomp ($playerRecord);
-      if ( $csvPlayers->parse($playerRecord) ) {
-         my @playersFields = $csvPlayers->fields();
-         if (( $playersFields[3] eq $teamAbbr))
-         {
-            for (my $k = 0; $k<=15; $k++)
+    #Saves the game info if the team played in that game
+    while( $playerRecord = <$playersFH> ) 
+    {
+        chomp ($playerRecord);
+        if ( $csvPlayers->parse($playerRecord) ) 
+        {
+            my @playersFields = $csvPlayers->fields();
+            if (( $playersFields[3] eq $teamAbbr))
             {
-              if ($playersFields[7+$k] > 0)
-              {
-                $players[0] += $playersFields[7+$k];
-              }
+                for (my $k = 0; $k<=15; $k++)
+                {
+                    if ((defined $playersFields[7+$k]) && ($playersFields[7+$k] ne ""))
+                    {
+                        $players[$k] += $playersFields[7+$k];
+                    }
+                }
+                $i ++; 
             }
-            #$players[0] += $playersFields[7]; #goals
-            #$players[1] += $playersFields[8]; #assists
-            #$players[2] += $playersFields[9]; #points
-           # $players[3] += $playersFields[10]; #plus/minus
-          #  $players[4] += $playersFields[11]; #penalty minutes
-         #   $players[5] += $playersFields[12]; #even strength goals
-        #    $players[6] += $playersFields[13]; #pwrplay goals
-       #     $players[7] += $playersFields[14]; #shrthnd goals
-      #      $players[8] += $playersFields[15]; #game winning pts
-     #       $players[9] += $playersFields[16]; #even strength assists
-    #        $players[10] += $playersFields[17]; #power play assists
-   #         $players[11] += $playersFields[18]; #shrthnd assists
-  #          $players[12] += $playersFields[19]; #shots
- #           $players[13] += $playersFields[20]; #shooting %
-#            $players[14] += $playersFields[21]; #time on ice
-#            $players[15] += $playersFields[22]; #avg time on ice
-            $i ++; 
-         }
-      }
-   }
+        }
+    }
+    if ($i == 0)
+    {
+        print "Team did not play that year\n";
+        return;
+    }
+    for (my $k = 0; $k<=15; $k++)
+    {
+        if (defined $players[$k])
+        {
+            $players[$k] = $players[$k] / $i;
+        }
+    }
+    close $playersFH
+        or warn "Unable to close players.csv in folder $year during sub playersInfo";
 
-   close $playersFH
-      or warn "Unable to close players.csv in folder $year during sub playersInfo";   
+    @players;
 }
