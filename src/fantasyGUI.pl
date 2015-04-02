@@ -11,8 +11,8 @@ use Text::CSV;
 my $csvTestYearFile = Text::CSV->new({ sep_char => ','});
 my @yearToTeamFields;
 my @tempTeamRoster;
-my @teamRoster;
-my @yearRoster;
+my @teamRoster="";
+my @yearRoster=0;
 my $yearToTeamAbbrev;
 
 my $i = 0;
@@ -66,7 +66,7 @@ while ($usrInput1 != 4)
            
             if ($usrInput2 == 1)
             {
-            while ($usrYearInput != 0)
+                while ($usrYearInput != 0)
                 {
                     my $tempCount=0;
                     print "Enter a year between 1917 and 2014 that you wish to search for, or 0 to exit:";
@@ -124,32 +124,23 @@ while ($usrInput1 != 4)
                         my $tempVal=0;
                         for ($i=0;$i<$tempCount;$i++)
                         {
-                            #for ($j=0;$j<$tempCount;$j++)
-                            #{                          
-                            
-                                if ($tempTeamRoster[$i] eq $usrTeamInput)
-                                {                                
-                                    $tempVal=$tempVal+1;
-                                    $totalTeams=$totalTeams+1;
-                                    $teamRoster[$totalTeams]=$teamRoster[$i];
-                                    $yearRoster[$totalTeams]=$usrYearInput;
-                                }
-                            #} 
+                            if ($tempTeamRoster[$i] eq $usrTeamInput)
+                            {                                
+				
+                                $teamRoster[$teamCountUp]= $tempTeamRoster[$i];
+                                $yearRoster[$teamCountUp]=$usrYearInput;
+				print "$yearRoster[$totalTeams] ";
+                                printf" $teamRoster[$totalTeams] has been added to your list\n";
+				$tempVal=$tempVal+1;
+                                $teamCountUp=$teamCountUp+1;
+                            }
                         }
                         if ($tempVal==0)
                         {
                             print"Invalid Team Choice\n";
                         }
-                                                
-#seek ($yearToTeamFH, 0, 0);
-                       
-                        
-
-#while ( $yearToTeamRecord = <$yearToTeamFH>)
-#                        {                        
-#                            
-#                        }
-#                        close ($yearFile);
+                        close ($yearFile);
+			$usrYearInput=0;
                     }
 
 
@@ -185,10 +176,13 @@ while ($usrInput1 != 4)
             }
             if ($usrInput2 == 3)
             {
-                print "Please enter the year between 1917 and 2014 that you wish to use:";
+                my $tempCount=0;
+		print "Please enter the year between 1917 and 2014 that you wish to use:";
                 $usrYearInput= <>;
+		chomp ($usrYearInput);
                 print "Please enter the team abbreviation that you wish to use:";
                 $usrTeamInput= <>;
+		chomp ($usrTeamInput);
                 print "\033[2J"; #clear the screen
                 print "\033[0;0H"; #jump to 0,0
 
@@ -196,21 +190,78 @@ while ($usrInput1 != 4)
                 {
                     print "Invalid year input\n";
                 }                
+                if (($usrYearInput > 1916) && ($usrYearInput < 2015))
+                {
+                    my $yearFile = "../data/$usrYearInput/teams.csv";                        
+                    open (my $yearToTeamFH, "<",$yearFile) 
+                          
+                        or die "Unable to open the required year's file: $yearFile";
+                     
+                    my $yearToTeamRecord = <$yearToTeamFH>;
+                    my $teamCount=0;
+                    $tempCount=0; 
+                    while ( $yearToTeamRecord = <$yearToTeamFH>)
+                    {
+                        my $test; 
+                        chomp ($yearToTeamRecord);
+                        if ($csvTestYearFile->parse($yearToTeamRecord) )
+                        {
+                            @yearToTeamFields = $csvTestYearFile->fields();
+                            $yearToTeamAbbrev = $yearToTeamFields[2];
+                            #$yearToTeamAbbrev = $tempTeamRoster[$tempCount];
+                            $tempTeamRoster[$tempCount]=$yearToTeamAbbrev;
+                            $tempCount=$tempCount+1;
 
-            }
+                            my $tempVal=0;
+                            for ($i=0;$i<$tempCount;$i++)
+                            {
+                                if ($tempTeamRoster[$i] eq $usrTeamInput)
+                                {                                
+                                    
+                                    $teamRoster[$teamCountUp]=$usrTeamInput;
+                                    $yearRoster[$teamCountUp]=$usrYearInput;
+				    print "$yearRoster[$teamCountUp]  $teamRoster[$teamCountUp] has been added to your list\n";
+				    $tempVal=$tempVal+1;
+                                    $teamCountUp=$teamCountUp+1;
+                                }
+                            }
+                            if ($tempVal==0)
+                            {
+                                print"Invalid Team Choice\n";
+                            }
+                            close ($yearFile);
+			    $usrTeamInput="exit";
 
 
-        }
-    }        
+
+                       }
+                   }
+               }
+	   }               
+       }
+    }   
     if ($usrInput1 == 2)
     {
-
-        print "Here are the teams that you have chosen to use for the game: \n";
-        #
-        #Here will be a loop that prints out all of the team names from the team array. To be done.
-        #
-        print "How many games would you like to play?";
-
+          
+	print "Here are the teams that you have chosen to use for the game: \n";
+        for ($i=0;$i<$teamCountUp;$i++)
+	{
+            my $teamCount=0;
+	    if ($teamCount < 5)
+            {
+                print "$yearRoster[$i] $teamRoster[$i]\t";               
+                $teamCount=$teamCount+1;
+            }
+            else
+            {
+                print "$yearRoster[$i] $teamRoster[$i]\n";
+                $teamCount=0;
+            } 
+	}
+	#Here will be a loop that prints out all of the team names from the team array. To be done.
+        
+	print "\nHow many games would you like to play?\n";
+	#print "This function is not currently implemented in this version. This function will be implemented in V2 of the program";
     } 
 }
 
