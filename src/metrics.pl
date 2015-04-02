@@ -70,22 +70,21 @@ my @plusMinus2;
 #my $win;
 #my @score;
 
-#$win =&calcWinner(\@MTLf,\@MTLa,\@OTSf,\@OTSa);
+#$win =&calcWinner(\@MTLf,\@MTLa,\@OTSf,\@OTSa,3);
 
-#if($win == 1)
+#if($win == 1 || $win == 3)
 #{
 #    print"Team 1 wins\n";
 #    @score = genScore(\@MTLf,\@MTLa);
 #    print "Goals: $score[0], Against: $score[1]\n";
 #}
-#
-#if($win == 2)
+
 #{
 #    print"Team 2 wins\n";
 #    @score = genScore(\@OTSf,\@OTSa);
 #    print "Goals: $score[0], Against: $score[1]\n";
 #}
-#
+
 #if($win == 0)
 #{
 #    print"draw?\n";
@@ -101,6 +100,7 @@ sub loopMatches{
     my $numMatches = $#matchArray+1;
     my $i;
     my $curQuart;
+    my $winPoint;
     my @results;
     my @home;
     my @homef;
@@ -176,19 +176,42 @@ sub loopMatches{
         $curQuart= &checkQuart($i,$numMatches);
         print "current quarter: $curQuart\n"; 
         #calculate the winners and store in array         
-        $results[$i] = &calcWinner(\@homef,\@homea,\@awayf,\@awaya,$curQuart);
+        $winPoint = &calcWinner(\@homef,\@homea,\@awayf,\@awaya,$curQuart);
+        if($winPoint == 1 || $winPoint == 3)
+        {
+            $results[$i][0] = genScore(\@homef,\@homea,$curQuart,0);
+            $results[$i][1] = genScore(\@awayf,\@awaya,$curQuart,$winPoint);
+            
+        }
+        if($winPoint == 2 || $winPoint == 4)
+        {
+            $results[$i][0] = genScore(\@awayf,\@awaya,$curQuart,0);
+            $results[$i][1] = genScore(\@homef,\@homea,$curQuart,0);
+        }
+        else
+        {   
+            $results[$i][0] = genScore(\@awayf,\@awaya,$curQuart,$winPoint);
+            $results[$i][1] = genScore(\@homef,\@homea,$curQuart,$winPoint);
+        }   
     }
     
-    #print the results    
+    #print the results 
+    print"game# | for | against\n";
     foreach(@results)
     {
-        print "$_\n";
+        print"game: ";
+        foreach (@$_)
+        {
+           print "$_ ";
+        }
+        print"\n";
     }
-     
     return 0;
 
 
 }
+
+    
 
 #determines which quarter we are currently in and returns it (1..4)
 sub checkQuart{
@@ -292,16 +315,24 @@ sub quarterly{
 #plays roullete to generate random scores
 sub roulette{
 
-    my ($max,$median,$min) = @_;
+    my ($max,$avg,$min,$mod) = @_;
     my $random;
     
-    $random =int(rand($max))+1;
-    
-    if($random < $median){
-        $random = int(rand($median)+1);
+    if($mod == 1){
+        $max= int($max*1.3);
+        $min = $avg;
     }
-    else{
-        $random = int(rand($max)+1);
+
+    $random =int(rand(10))+1;
+    
+    if($random <= 1){
+        $random = int(rand($min)+1);
+    }
+    if($random <= 9){
+        $random = $min+int(rand($avg-$min)+1);
+    }
+    if($random <=10){
+        $random = $avg+int(rand($max-$avg)+1);
     }
 
     return $random;
@@ -435,47 +466,76 @@ sub calcWinner{
 
 #generate realistic scores based on match outcome and average team performance
 sub genScore{
-    my @Teamf= @{$_[0]};
-    my @Teama= @{$_[0]};
+    my @teamF= @{$_[0]};
+    my @teamA= @{$_[1]};
+    my $curQuart = $_[2];
+    my $winPoint = $_[3];
 
+    my @quartAvgF = &quarterly(\@teamF);
+    my @quartAvgA = &quarterly(\@teamA);
     my $i;
+    my $curAvgF;
+    my $curAvgA;
     my $Max =-1;
     my $Min = 99999;
     my $average = 0;
     my $Goalf = 0;
     my $Goala= 0;
     my @Goals;
+    my $modifier = 0;
 
-    for($i=0;$i<$#Teamf+1;$i++){
-        if($Teamf[$i] > $Max){
-            $Max = $Teamf[$i];
-        }
-        if($Teamf[$i] < $Min){
-            $Min = $Teamf[$i];
-        }
-        $average=+$Teamf[$i];
+    if($winPoint == 2 || $winPoint == 4)
+    {
+        $modifier = 1; #they have a weak defence
     }
-    $average= int($average / ($#Teamf+1));
 
-    $Goalf = &roulette($Max,$average,$Min);
-    
-    for($i=0;$i<$#Teama+1;$i++){
-        if($Teama[$i] > $Max){
-            $Max = $Teama[$i];
-        }
-        if($Teama[$i] < $Min){
-            $Min = $Teama[$i];
-        }
-        $average=+$Teama[$i];
+    if($curQuart == 1)
+    {
+        $curAvgF = $quartAvgF[0];
+        $curAvgA = $quartAvgA[0];
     }
-    $average= int($average / ($#Teama+1));
+    if($curQuart == 2)
+    {
+        $curAvgF = $quartAvgF[1];
+        $curAvgA = $quartAvgA[1];
+    }
+    if($curQuart == 3)
+    {
+        $curAvgF = $quartAvgF[2];
+        $curAvgA = $quartAvgA[2];
+    }
+    if($curQuart == 4)
+    {
+        $curAvgF = $quartAvgF[3];
+        $curAvgA = $quartAvgA[3];
+    }
 
-    $Goala = &roulette($Max,$average,$Min);
+    for($i=0;$i<$#teamF+1;$i++){
+        if($teamF[$i] > $Max){
+            $Max = $teamF[$i];
+        }
+        if($teamF[$i] < $Min){
+            $Min = $teamF[$i];
+        }
+    }
     
-    $Goals[0] = $Goalf;
-    $Goals[1] = $Goala;
+    $Goalf = &roulette($Max,$curAvgF,$Min,$modifier);
     
-    return @Goals;
+    for($i=0;$i<$#teamA+1;$i++){
+        if($teamA[$i] > $Max){
+            $Max = $teamA[$i];
+        }
+        if($teamA[$i] < $Min){
+            $Min = $teamA[$i];
+        }
+    }
+
+    $Goala = &roulette($Max,$curAvgA,$Min,0);
+    
+    #$Goals[0] = $Goalf;
+    #$Goals[1] = $Goala;
+    
+    return $Goalf;
 }
 
 ####################JROGER's CODE########################################
