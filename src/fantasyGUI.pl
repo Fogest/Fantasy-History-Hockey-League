@@ -46,7 +46,7 @@ while ($usrInput1 != 4)
     print "\033[0;0H"; #jump to 0,0
     if ($usrInput1 == 1)
     {
-        while ($usrInput2 !=4)
+        while ($usrInput2 !=3)
         {
             $usrYearInput = 1900;
             print "|----------------------------|\n";
@@ -55,9 +55,8 @@ while ($usrInput1 != 4)
 
 
             print "1.Search by year\n";
-            print "2.Search by team\n";
-            print "3.Quick Add\n";
-            print "4.Return to Main Menu\n\n";
+            print "2.Quick Add\n";
+            print "3.Return to Main Menu\n\n";
             print "Enter the number of your choice:";
             $usrInput2= <>; 
             print "\033[2J";    #clear the screen
@@ -153,7 +152,7 @@ while ($usrInput1 != 4)
                     }
                 }
             }
-            if ($usrInput2 == 2)
+            if ($usrInput2 == 10)
             {
                 $usrTeamInput = "default"; 
                 while ($usrTeamInput ne "exit")
@@ -174,7 +173,7 @@ while ($usrInput1 != 4)
                     } 
                 }
             }
-            if ($usrInput2 == 3)
+            if ($usrInput2 == 2)
             {
                 my $tempCount=0;
 		print "Please enter the year between 1917 and 2014 that you wish to use:";
