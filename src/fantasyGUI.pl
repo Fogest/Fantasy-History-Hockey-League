@@ -258,7 +258,7 @@ while ($usrInput1 != 4)
                 $teamCount=0;
             } 
 	}
-	#Here will be a loop that prints out all of the team names from the team array. To be done.
+
         
 	print "\nHow many games would you like to play?\n";
 	#print "This function is not currently implemented in this version. This function will be implemented in V2 of the program";
