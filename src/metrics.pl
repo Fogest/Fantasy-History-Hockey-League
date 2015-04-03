@@ -16,14 +16,14 @@ my @OTS = (@OTSf,@OTSa);
 ######simulate justin's array pass##############
 #my @matchSyntax = (homeYear,homeTeam,awayYear,awayTeam);
 my @matchArray=(
-    [1981,"MTL",1990,"OTS"],
-    [1990,"OTS",1988,"NYR"],
-    [1988,"NYR",1981,"MTL"],
-    [1981,"MTL",1990,"OTS"],
-    [1988,"NYR",1981,"MTL"],
-    [1990,"OTS",1988,"NYR"],
-    [1981,"MTL",1988,"NYR"],
-    [1988,"NYR",1990,"OTS"],
+    [1917,"TRA",1917,"MTW"],
+    [1917,"MTL",1917,"OTS"],
+    [1917,"MTL",1917,"MTW"],
+    [1917,"OTS",1917,"TRA"],
+    [1917,"OTS",1917,"MTW"],
+    [1917,"TRA",1917,"TRA"],
+    [1917,"MTW",1917,"MTL"],
+    [1917,"MTW",1917,"OTS"],
      );
 
 ######################
@@ -39,6 +39,7 @@ sub loopMatches{
 #declare variables
     my $numMatches = $#matchArray+1;
     my $i;
+    my $k;
     my $curQuart;
     my $winPoint;
     my @results;
@@ -80,40 +81,53 @@ sub loopMatches{
         print "$matchArray[$i][1] vs ";
         print "$matchArray[$i][2] ";
         print "$matchArray[$i][3]\n";
+
+        @home = &resultsInfo($matchArray[$i][0],$matchArray[$i][1]);
+        @away = &resultsInfo($matchArray[$i][2],$matchArray[$i][3]);
     #this is where I will grab the data from files per match
     #for the time being i will use fake data for each match
-        if($matchArray[$i][1] eq "MTL")
-        {
-            @home=@MTL1981;
-        }
-        if($matchArray[$i][1] eq "OTS")
-        {
-            @home=@OTS1990;
-        }
-        if($matchArray[$i][1] eq "NYR")
-        {
-            @home=@NYR1988;
-        }
-        if($matchArray[$i][3] eq "MTL")
-        {
-            @away=@MTL1981;
-        }
-        if($matchArray[$i][3] eq "OTS")
-        {
-            @away=@OTS1990;
-        }
-        if($matchArray[$i][3] eq "NYR")
-        {
-            @away=@NYR1988;
-        }
+       # if($matchArray[$i][1] eq "MTL")
+       # {
+       #     @home=@MTL1981;
+       # }
+       # if($matchArray[$i][1] eq "OTS")
+       # {
+       #     @home=@OTS1990;
+       # }
+       # if($matchArray[$i][1] eq "NYR")
+       # {
+       #     @home=@NYR1988;
+       # }
+       # if($matchArray[$i][3] eq "MTL")
+       # {
+       #     @away=@MTL1981;
+       # }
+       # if($matchArray[$i][3] eq "OTS")
+       # {
+       #     @away=@OTS1990;
+       # }
+       #if($matchArray[$i][3] eq "NYR")
+       # {
+       #     @away=@NYR1988;
+       # }
         
         #this is the only way i understand how to make this bit work
         #basically used to break the array up into smaller parts to pass to subs
-        @homef= @{$home[0]};
-        @homea= @{$home[1]};
-
-        @awayf= @{$away[0]};
-        @awaya= @{$away[1]};
+        
+        for($k = 0; $k <$#home+1;$k++){
+            $homef[$k] = $home[$k][1];
+            $homea[$k] = $home[$k][3];
+        }
+        #@homef= @{$home[0]};
+        #@homea= @{$home[1]};
+        
+        for($k = 0; $k <$#away+1;$k++){
+            $awayf[$k] = $away[$k][1];
+            $awaya[$k] = $away[$k][3];
+        }
+        
+        #@awayf= @{$away[0]};
+        #@awaya= @{$away[1]};
         
         #get current quarter
         $curQuart= &checkQuart($i,$numMatches);
@@ -215,6 +229,7 @@ sub quarterly{
     my $numGames = $#scoreArray+1; 
     my $cQuart=0;
     my $k=0;
+    my $addedToQ; # used to track how much we have displaced quartes by
     my $countNumScores=0;
     #this tells me how much i need to displace my quarters
     #it will be either 1, 2, 3 or 0
@@ -223,16 +238,14 @@ sub quarterly{
     my @addToQ= (0,0,0,0);
     my $actualQLength;      
     my $lastValue=0;
-    #the even lenth of each quarter
+    #the even length of each quarter
     #removes up to 3 games from the length in order to maintain whole numbers
     my $avgQLength =(($numGames-($numGames%4))/4);
-    
     #for every game removed from the season, assign 1 to be added to a quarter
     #Quarters 1, 2,and 3 can have up to 1 game added to them
     for($k=0; $k<$addToQuarter; $k++){
         $addToQ[$k]=1;
     }
-    
     #this is where we get the quarterly averages
     for($cQuart=0;$cQuart<4;$cQuart++){
         #for each quarter
@@ -243,7 +256,8 @@ sub quarterly{
         #calculate how long the quarter actually is by:
             #multiplying avg quarter length by the current quarter we are in
             #adding any extra games to the quarter
-        $actualQLength = (($cQuart+1) *$avgQLength)+$addToQ[$cQuart];
+        $addedToQ += $addToQ[$cQuart];
+        $actualQLength = + (($cQuart+1) *$avgQLength)+$addedToQ;
         #loop through the quarter and sum all the scores
         for($k = $lastValue; $k<$actualQLength; $k++){
             $avgArray[$cQuart] += $scoreArray[$k];
@@ -345,9 +359,12 @@ sub calcWinner{
     my $betterAttack = 0; 
     my $weakerDefence = 0;
     
-    my @quart1f= quarterly(\@Team1f); 
+    my @quart1f= quarterly(\@Team1f);
+    
     my @quart1a= quarterly(\@Team1a);
+   
     my @quart2f= quarterly(\@Team2f);
+    
     my @quart2a= quarterly(\@Team2a);
    
     print"for: ";
