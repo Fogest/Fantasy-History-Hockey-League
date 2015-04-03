@@ -23,7 +23,7 @@ my $countTeams= 0;
 my $yearToTeamAbbrev;
 my $tempSwapName;
 my $tempSwapYear;
-
+my @gameResults;
 my $i = 0;
 my $j = 0; 
 my $tempCounter =0;
@@ -407,7 +407,7 @@ while ($usrInput1 != 4)
                     }
                 }
 
-                if($usrInput3 == 4)
+                if($usrInput3 == 3)
                 {
                     &clrScreen;
                 }
@@ -446,8 +446,14 @@ while ($usrInput1 != 4)
 
             @matchArray = &genSchedule(\@teamRoster,\@yearRoster,$numGamesToPlay);
             
-            &loopMatches(\@matchArray); 
+            @gameResults=&loopMatches(\@matchArray); 
         } 
+    }
+    if($usrInput1==3)
+    {
+        &clrScreen;
+        print"Generating PDF\n";
+        &createCsvResults(\@gameResults);
     }
 
 }
@@ -666,7 +672,7 @@ sub loopMatches{
         $counter++;
         print"$counter\t| @$_[0]\t| @$_[1]\t| @$_[2]\t| @$_[3] \t| @$_[4]\t| @$_[5]\n";
     }
-    return 0;
+    return @results;
 
 
 }
@@ -704,20 +710,39 @@ sub checkQuart{
 }
 
 #sub remains unused;
-sub calcPM{
+sub createCsvResults{
 #calculates the PlusMinus of a team given the scores that team made
-    my @teama = @{$_[0]};
-    my @teamf = @{$_[1]};
+    my @resultArray = @{$_[0]};
+    
     my @pM;
-
+    my $gameNum;
     my $i;
 
-    for($i=0;$i<$#teama+1;$i++)
+    for($i=0;$i<$#resultArray+1;$i++)
     {
-        $pM[$i] = $teama[$i] - $teamf[$i];
+        $pM[$i] = $resultArray[$i][2] - $resultArray[$i][5];
     }
 
-    return @pM;
+    my $newCsv = "print/output.csv";
+
+    open(my $fh, '>', $newCsv) or die "could not open file";
+
+    print $fh "Game,Differential,Performance\n";
+    for($i =0; $i<$#pM+1;$i++)
+    {
+        $gameNum = $i +1;    
+        print $fh "$gameNum,$pM[$i],";
+        if($pM[$i] >= 0)
+        {
+            print $fh "Wins\n";
+        }
+        else
+        {
+            print $fh "Losses\n";
+        }
+    }
+    
+    close($fh);
 }
 
 #calculates the quarterly averages and returns them in an array(av1,av2,av3,av4)
