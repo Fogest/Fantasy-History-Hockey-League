@@ -534,7 +534,7 @@ sub getInputYear{
     chomp ($inputY); 
     &clrScreen;
 
-    while($inputY < 1917 || $inputY > 2015)
+    while($inputY < 1917 || $inputY > 2014)
     {
         &clrScreen;
         print"Sorry, we only have records from years 1917 to 2014\n";
