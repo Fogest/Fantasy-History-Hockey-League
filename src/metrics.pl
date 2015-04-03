@@ -5,14 +5,6 @@ use Text::CSV;
 ############################
 #  Use the CSV module
 #  Created By Nick
-#####testing fake info
-my @teamNames=("MTL","OTS");
-my @MTLa=(2,1,4,0,4,2,2,3,3,3,3,1,2,3,11,11);
-my @MTLf=(1,1,1,2,2,2,1,1,1,3,3,3,4,4,4,1,1);
-my @MTL = (@MTLf,@MTLa);
-my @OTSa=(3,3,3,3,3,3,3,3,3);
-my @OTSf=(2,2,2,2,2,1,0,1,0);
-my @OTS = (@OTSf,@OTSa);
 ######simulate justin's array pass##############
 #my @matchSyntax = (homeYear,homeTeam,awayYear,awayTeam);
 my @matchArray=(
@@ -21,14 +13,40 @@ my @matchArray=(
     [1917,"MTL",1917,"MTW"],
     [1917,"OTS",1917,"TRA"],
     [1917,"OTS",1917,"MTW"],
-    [1917,"TRA",1917,"TRA"],
-    [1917,"MTW",1917,"MTL"],
+    [1917,"MTL",1917,"TRA"],
+    [1917,"TRA",1917,"MTL"],
     [1917,"MTW",1917,"OTS"],
+    [1917,"MTW",1917,"MTL"],
+    [1917,"TRA",1917,"OTS"],
+    [1917,"OTS",1917,"MTL"],
+    [1917,"MTW",1917,"TRA"],
+    [1917,"MTL",1917,"TRA"],
+    [1917,"OTS",1917,"MTL"],
+    [1917,"TRA",1917,"OTS"],
+    [1917,"OTS",1917,"TRA"],
+    [1917,"TRA",1917,"MTL"],
+    [1917,"MTL",1917,"OTS"],
+    [1917,"OTS",1917,"MTL"],
+    [1917,"TRA",1917,"OTS"],
+    [1917,"MTL",1917,"TRA"],
+    [1917,"MTL",1917,"OTS"],
+    [1917,"TRA",1917,"MTL"],
+    [1917,"OTS",1917,"TRA"],
+    [1917,"MTL",1917,"OTS"],
+    [1917,"TRA",1917,"MTL"],
+    [1917,"OTS",1917,"TRA"],
+    [1917,"TRA",1917,"OTS"],
+    [1917,"OTS",1917,"MTL"],
+    [1917,"MTL",1917,"TRA"],
+    [1917,"TRA",1917,"MTL"],
+    [1917,"OTS",1917,"TRA"],
+    [1917,"MTL",1917,"OTS"],
+    [1917,"OTS",1917,"MTL"],
+    [1917,"MTL",1995,"DET"],
+    [1917,"TRA",1917,"OTS"],
      );
 
 ######################
-my @plusMinus1;
-my @plusMinus2;
 
 loopMatches(\@matchArray);
 
@@ -75,65 +93,33 @@ sub loopMatches{
     );
     
 ###############
-    print"SCHEDULE: \n";
     for( $i = 0; $i<$numMatches; $i++){
-        print "$matchArray[$i][0] ";
-        print "$matchArray[$i][1] vs ";
-        print "$matchArray[$i][2] ";
-        print "$matchArray[$i][3]\n";
+       # print "$matchArray[$i][0] ";
+       # print "$matchArray[$i][1] vs ";
+       # print "$matchArray[$i][2] ";
+       # print "$matchArray[$i][3]\n";
 
         @home = &resultsInfo($matchArray[$i][0],$matchArray[$i][1]);
         @away = &resultsInfo($matchArray[$i][2],$matchArray[$i][3]);
-    #this is where I will grab the data from files per match
-    #for the time being i will use fake data for each match
-       # if($matchArray[$i][1] eq "MTL")
-       # {
-       #     @home=@MTL1981;
-       # }
-       # if($matchArray[$i][1] eq "OTS")
-       # {
-       #     @home=@OTS1990;
-       # }
-       # if($matchArray[$i][1] eq "NYR")
-       # {
-       #     @home=@NYR1988;
-       # }
-       # if($matchArray[$i][3] eq "MTL")
-       # {
-       #     @away=@MTL1981;
-       # }
-       # if($matchArray[$i][3] eq "OTS")
-       # {
-       #     @away=@OTS1990;
-       # }
-       #if($matchArray[$i][3] eq "NYR")
-       # {
-       #     @away=@NYR1988;
-       # }
-        
-        #this is the only way i understand how to make this bit work
-        #basically used to break the array up into smaller parts to pass to subs
-        
+       
+       #get for and against scores for home then for away 
         for($k = 0; $k <$#home+1;$k++){
             $homef[$k] = $home[$k][1];
             $homea[$k] = $home[$k][3];
         }
-        #@homef= @{$home[0]};
-        #@homea= @{$home[1]};
         
         for($k = 0; $k <$#away+1;$k++){
             $awayf[$k] = $away[$k][1];
             $awaya[$k] = $away[$k][3];
         }
         
-        #@awayf= @{$away[0]};
-        #@awaya= @{$away[1]};
-        
         #get current quarter
         $curQuart= &checkQuart($i,$numMatches);
-        print "current quarter: $curQuart\n"; 
+        
         #calculate the winners and store in array         
+        
         $winPoint = &calcWinner(\@homef,\@homea,\@awayf,\@awaya,$curQuart);
+        
         if($winPoint == 1 || $winPoint == 3)
         {
             $resultHome = genScore(\@homef,\@homea,$curQuart,0);
@@ -203,7 +189,7 @@ sub checkQuart{
     return 0;
 }
 
-
+#sub remains unused;
 sub calcPM{
 #calculates the PlusMinus of a team given the scores that team made
     my @teama = @{$_[0]};
@@ -231,16 +217,21 @@ sub quarterly{
     my $k=0;
     my $addedToQ; # used to track how much we have displaced quartes by
     my $countNumScores=0;
+    
     #this tells me how much i need to displace my quarters
     #it will be either 1, 2, 3 or 0
     my $addToQuarter = $numGames%4;
+    
     #used to modify quarters, initialized to prevent strange behavior
     my @addToQ= (0,0,0,0);
+    
     my $actualQLength;      
     my $lastValue=0;
+    
     #the even length of each quarter
     #removes up to 3 games from the length in order to maintain whole numbers
     my $avgQLength =(($numGames-($numGames%4))/4);
+    
     #for every game removed from the season, assign 1 to be added to a quarter
     #Quarters 1, 2,and 3 can have up to 1 game added to them
     for($k=0; $k<$addToQuarter; $k++){
@@ -312,8 +303,6 @@ sub compareQ{
     {
         #get the array index corresponding to that quarter
         $qNum--; 
-        
-        print "$quart1[$qNum] vs $quart2[$qNum]\n";
 
         #compare quarters to determine which is higher  
         if($quart1[$qNum] > $quart2[$qNum])
@@ -367,10 +356,9 @@ sub calcWinner{
     
     my @quart2a= quarterly(\@Team2a);
    
-    print"for: ";
     #compare offensive strength
     $betterAttack = compareQ(\@quart1f,\@quart2f,$quartNum);
-    print"against: ";
+    
     #compare defensice strength
     $weakerDefence = compareQ(\@quart1a,\@quart2a,$quartNum);
 
