@@ -659,7 +659,7 @@ sub loopMatches{
     }
     
     #print the results 
-    print"game#\t| home\t| year\t| score\t| away\t| year\t| score\n";
+    print"game#\t| year\t| home\t| score\t| year\t| home\t| score\n";
     my $counter = 0;
     foreach(@results)
     {
