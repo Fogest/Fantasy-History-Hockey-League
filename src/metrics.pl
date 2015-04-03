@@ -29,67 +29,7 @@ my @matchArray=(
 ######################
 my @plusMinus1;
 my @plusMinus2;
-#############code used in testing###########
-#@plusMinus1 =&calcPM(\@MTLa,\@MTLf);
-#print "plusMinus1: \n";
-#foreach (@plusMinus1){
-#    print $_,"\n";
-#};
 
-#@plusMinus2 =&calcPM(\@OTSa,\@OTSf);
-#print "plusMinus2: \n";
-#foreach (@plusMinus2){
-#    print $_,"\n";
-#};
-
-#my @quart1;
-#my @quart2;
-
-#@quart1 = &quarterly(\@MTLf);
-#print "quartely offence: \n";
-#foreach(@quart1)
-#{
-#    print $_,"\n";
-#}
-#
-#
-#@quart2 = &quarterly(\@MTLa);
-#print "quartely defence: \n";
-#foreach(@quart2)
-#{
-#    print $_,"\n";
-#}
-#
-#
-#my $random;
-
-#$random = roulette(20,5,1);
-
-#print "random: $random \n";
-
-#my $win;
-#my @score;
-
-#$win =&calcWinner(\@MTLf,\@MTLa,\@OTSf,\@OTSa,3);
-
-#if($win == 1 || $win == 3)
-#{
-#    print"Team 1 wins\n";
-#    @score = genScore(\@MTLf,\@MTLa);
-#    print "Goals: $score[0], Against: $score[1]\n";
-#}
-
-#{
-#    print"Team 2 wins\n";
-#    @score = genScore(\@OTSf,\@OTSa);
-#    print "Goals: $score[0], Against: $score[1]\n";
-#}
-
-#if($win == 0)
-#{
-#    print"draw?\n";
-#}
-#############end of code used in testing################
 loopMatches(\@matchArray);
 
 #loops through the schedule of matches and calculates the winners
@@ -108,6 +48,9 @@ sub loopMatches{
     my @awayf;
     my @awaya;
     my @away;
+    my $resultHome;
+    my $resultAway;
+
 #temp data till i can grab data on demand
     my @MTL1981=(
       #goalsfor
@@ -125,7 +68,7 @@ sub loopMatches{
 
     my @NYR1988 = (
       #goalsFor
-        [15,15,15,15,15,15,15,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       #goalsAgainst
         [3,3,3,3,3,3,3,7,7,7,7,7,12,12,12,12],
     );
@@ -179,31 +122,35 @@ sub loopMatches{
         $winPoint = &calcWinner(\@homef,\@homea,\@awayf,\@awaya,$curQuart);
         if($winPoint == 1 || $winPoint == 3)
         {
-            $results[$i][0] = genScore(\@homef,\@homea,$curQuart,0);
-            $results[$i][1] = genScore(\@awayf,\@awaya,$curQuart,$winPoint);
+            $resultHome = genScore(\@homef,\@homea,$curQuart,0);
+            $resultAway = genScore(\@awayf,\@awaya,$curQuart,$winPoint);
         }
         if($winPoint == 2 || $winPoint == 4)
         {
-            $results[$i][0] = genScore(\@awayf,\@awaya,$curQuart,0);
-            $results[$i][1] = genScore(\@homef,\@homea,$curQuart,$winPoint);
+            $resultAway = genScore(\@awayf,\@awaya,$curQuart,0);
+            $resultHome = genScore(\@homef,\@homea,$curQuart,$winPoint);
         }
         if($winPoint == 5)
         {   
-            $results[$i][0] = genScore(\@awayf,\@awaya,$curQuart,$winPoint);
-            $results[$i][1] = genScore(\@homef,\@homea,$curQuart,$winPoint);
-        }   
+            $resultAway = genScore(\@awayf,\@awaya,$curQuart,$winPoint);
+            $resultHome = genScore(\@homef,\@homea,$curQuart,$winPoint);
+        }
+        
+        $results[$i][0] = $matchArray[$i][1];
+        $results[$i][1] = $resultHome;
+        $results[$i][2] = $matchArray[$i][3];
+        $results[$i][3] = $resultAway;
+        
+
     }
     
     #print the results 
-    print"game# | for | against\n";
+    print"game#\t| home\t| score\t| away\t| score\n";
+    my $counter = 0;
     foreach(@results)
     {
-        print"game: ";
-        foreach (@$_)
-        {
-           print "$_ ";
-        }
-        print"\n";
+        $counter++;
+        print"$counter\t| @$_[0]\t| @$_[1]\t| @$_[2]\t| @$_[3]\n";
     }
     return 0;
 
@@ -325,13 +272,13 @@ sub roulette{
     $random =int(rand(10))+1;
     
     if($random <= 2){
-        $random = int(rand($min)+1);
+        $random = int(rand($min));
     }
     if($random <= 8){
-        $random = $min+int(rand($avg-$min)+1);
+        $random = $min+int(rand($avg-$min));
     }
     if($random <=10){
-        $random = $avg+int(rand($max-$avg)+1);
+        $random = $avg+int(rand($max-$avg));
     }
 
     return $random;
