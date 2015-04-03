@@ -29,7 +29,7 @@ my $j = 0;
 my $tempCounter =0;
 my $testVar =0;
 my $totalTeams =0;
-my $flagEqualInputs;
+
 my $usrInput1 = 0;
 my $usrInput2 = 0;
 my $usrInput3 = 0;
@@ -287,7 +287,7 @@ while ($usrInput1 != 4)
                         &clrScreen;
                         &displayTeamRoster(\@teamRoster,\@yearRoster);
                         print"sorry that number doesnt match a team, Please try again";
-                        print"\nEnter the number of the team you want to remove\n";
+                        print"\nEnter the number of the team you want to remove or 0 to go back\n";
                         print"team #: ";
                         $usrInput4 =<>;
                         chomp($usrInput4);
@@ -325,7 +325,7 @@ while ($usrInput1 != 4)
                         &clrScreen;
                         &displayTeamRoster(\@teamRoster,\@yearRoster);
                         print"sorry that number doesnt match a team, Please try again";
-                        print"\nEnter the number of the team you want to swap\n";
+                        print"\nEnter the number of the team you want to swap or 0 to go back\n";
                         print"team 1 #: ";
                         $usrInput4 =<>;
                         chomp($usrInput4);
@@ -338,55 +338,37 @@ while ($usrInput1 != 4)
                         $usrInput5 =<>;
                         chomp($usrInput5);
 
-                        if($usrInput5 == $usrInput4)
+                        while($usrInput5 < 1 || $usrInput5 > $#teamRoster+1)
                         {
                             &clrScreen;
                             &displayTeamRoster(\@teamRoster,\@yearRoster);
-                            print"Team is already in that position\n";
-                            print"\nPlease enter a different position\n";
+                            print"sorry that number doesnt match a team, Please try again\n";
+                            print"\nEnter the number of the team you want to swap\n";
                             print"team 2 #: ";
-                            $usrInput4 =<>;
-                            chomp($usrInput4);
+                            $usrInput5 =<>;
+                            chomp($usrInput5);
+                            
                         }
-
-                        while($usrInput5 < 1 || $usrInput5 > $#teamRoster+1)
+                        if($usrInput5 == $usrInput4)
                         {
-                            $flagEqualInputs = 0;
-                            while($usrInput5 == $usrInput4)
-                            {
-                                &clrScreen;
-                                &displayTeamRoster(\@teamRoster,\@yearRoster);
-                                print"Team is already in that position\n";
-                                print"\nPlease enter a different position\n";
-                                print"team 2 #: ";
-                                $usrInput4 =<>;
-                                chomp($usrInput4);
-                                $flagEqualInputs = 1;
-                            }
-
-                            if(!$flagEqualInputs)
-                            {
-
-                                &clrScreen;
-                                &displayTeamRoster(\@teamRoster,\@yearRoster);
-                                print"sorry that number doesnt match a team, Please try again\n";
-                                print"\nEnter the number of the team you want to swap\n";
-                                print"team 2 #: ";
-                                $usrInput5 =<>;
-                                chomp($usrInput5);
-                            }
+                            &clrScreen;
+                            print"Team is already in that position\n";
+                            print"\n**nothing to change, returning to menu**\n";
                         }
+                        else
+                        {
 
-                        $tempSwapName = $teamRoster[$usrInput4-1];
-                        $teamRoster[$usrInput4-1] = $teamRoster[$usrInput5-1];
-                        $teamRoster[$usrInput5-1] = $tempSwapName;  
+                            $tempSwapName = $teamRoster[$usrInput4-1];
+                            $teamRoster[$usrInput4-1] = $teamRoster[$usrInput5-1];
+                            $teamRoster[$usrInput5-1] = $tempSwapName;  
 
-                        $tempSwapYear = $yearRoster[$usrInput4-1];
-                        $yearRoster[$usrInput4-1] = $yearRoster[$usrInput5-1];
-                        $yearRoster[$usrInput5-1] = $tempSwapYear; 
+                            $tempSwapYear = $yearRoster[$usrInput4-1];
+                            $yearRoster[$usrInput4-1] = $yearRoster[$usrInput5-1];
+                            $yearRoster[$usrInput5-1] = $tempSwapYear; 
 
-                        &clrScreen;
-                        print"***$yearRoster[$usrInput4-1] $teamRoster[$usrInput4-1] swapped with $yearRoster[$usrInput5-1] $teamRoster[$usrInput5-1]***\n";
+                            &clrScreen;
+                            print"***$yearRoster[$usrInput4-1] $teamRoster[$usrInput4-1] swapped with $yearRoster[$usrInput5-1] $teamRoster[$usrInput5-1]***\n";
+                        }
                     }
                 }
 
@@ -547,7 +529,7 @@ sub getInputYear{
     chomp ($inputY); 
     &clrScreen;
 
-    while($inputY < 1916 || $inputY > 2015)
+    while($inputY < 1917 || $inputY > 2015)
     {
         &clrScreen;
         print"Sorry, we only have records from years 1917 to 2014\n";
