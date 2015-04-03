@@ -76,6 +76,8 @@ my $usrYearInput = 1900;
 my $usrTeamInput = "default";
 my $teamCountUp=0;
 
+print "\033[2J";    #clear the screen
+print "\033[0;0H"; #jump to 0,0
 while ($usrInput1 != 4)
 {
     $usrInput2 = 0; 
@@ -315,23 +317,17 @@ while ($usrInput1 != 4)
             print "\nHow many games would you like to play?\n";
             my $numGamesToPlay = <>; 
             chomp($numGamesToPlay);
-            while($numGamesToPlay < 4 || $numGamesToPlay > 1000)
+            while($numGamesToPlay < 4 || $numGamesToPlay > 500)
             {
                 print"Sorry, We cannot play $numGamesToPlay matches in our league\n";
-                print"minimum #: 4, Max #: 1000\n";
+                print"minimum #: 4, Max #: 500\n";
                 $numGamesToPlay = <>; 
                 chomp($numGamesToPlay);
             }
 
             @matchArray = &genSchedule(\@teamRoster,\@yearRoster,$numGamesToPlay);
-            foreach(@matchArray){
-                print"game: ";
-                foreach(@$_){
-                    print"$_ ";
-                }
-                print"\n";
-            }
-            #&loopMatches(\@matchArray); 
+            
+            &loopMatches(\@matchArray); 
         } 
     }
 
@@ -393,30 +389,7 @@ sub loopMatches{
     my @away;
     my $resultHome;
     my $resultAway;
-
-#temp data till i can grab data on demand
-    my @MTL1981=(
-      #goalsfor
-        [9,9,9,9,9,0,0,0,0,0,0,0,11,11,11,11],
-      #goalsAgainst  
-        [1,1,1,2,2,2,1,1,1,3,3,3,4,4,4,1,1],
-    );
-
-    my @OTS1990 = (
-      #goalsfor
-        [1,1,1,1,2,2,13,13,13,13,13,13,8,8,8,9],
-      #goalsAgainst
-        [2,2,4,4,1,1,1,3,2,2,1,1,1,1,1,1],
-    );
-
-    my @NYR1988 = (
-      #goalsFor
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-      #goalsAgainst
-        [3,3,3,3,3,3,3,7,7,7,7,7,12,12,12,12],
-    );
     
-###############
     for( $i = 0; $i<$numMatches; $i++){
        # print "$matchArray[$i][0] ";
        # print "$matchArray[$i][1] vs ";

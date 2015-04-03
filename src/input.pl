@@ -37,10 +37,10 @@ my $c = 0;
 foreach(@playersOut)
 {
     print "Value $c:\t";
-    foreach($_)
-    {
+#    foreach($_)
+ #   {
         print "$_ ";
-    }
+  #  }
     print "\n";
     $c++;
 }
