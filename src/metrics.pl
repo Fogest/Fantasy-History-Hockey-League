@@ -126,7 +126,7 @@ while ($usrInput1 != 4)
                     {
                         foreach(@$_)
                         {
-                            if(length($_) > 16)
+                            if(length($_) > 15)
                             {
                                 print "$_\t";
                             }
@@ -264,8 +264,8 @@ while ($usrInput1 != 4)
                     &displayTeamRoster(\@teamRoster,\@yearRoster);  
                     print"Sorry, that was not an option, Please try Again\n\n";
                     print"\n1.Remove Team from Roster\n";
-                    print"2.swap team positions\n";
-                    print"3.back\n";
+                    print"2.Swap team positions\n";
+                    print"3.Back\n";
                     print"Enter the number of your choice\n";
                     print"choice: ";
 
@@ -286,7 +286,7 @@ while ($usrInput1 != 4)
                     {
                         &clrScreen;
                         &displayTeamRoster(\@teamRoster,\@yearRoster);
-                        print"sorry that number doesnt match a team, Please try again";
+                        print"Sorry that number doesnt match a team, Please try again";
                         print"\nEnter the number of the team you want to remove or 0 to go back\n";
                         print"team #: ";
                         $usrInput4 =<>;
@@ -324,7 +324,7 @@ while ($usrInput1 != 4)
                     {
                         &clrScreen;
                         &displayTeamRoster(\@teamRoster,\@yearRoster);
-                        print"sorry that number doesnt match a team, Please try again";
+                        print"Sorry that number doesnt match a team, Please try again";
                         print"\nEnter the number of the team you want to swap or 0 to go back\n";
                         print"team 1 #: ";
                         $usrInput4 =<>;
@@ -342,7 +342,7 @@ while ($usrInput1 != 4)
                         {
                             &clrScreen;
                             &displayTeamRoster(\@teamRoster,\@yearRoster);
-                            print"sorry that number doesnt match a team, Please try again\n";
+                            print"Sorry that number doesnt match a team, Please try again\n";
                             print"\nEnter the number of the team you want to swap\n";
                             print"team 2 #: ";
                             $usrInput5 =<>;
@@ -405,6 +405,11 @@ while ($usrInput1 != 4)
                         $countTeams = 0;
                         print"\n***Team Roster Cleared**\n";
                     }
+                }
+
+                if($usrInput3 == 4)
+                {
+                    &clrScreen;
                 }
                
             }               
@@ -472,7 +477,7 @@ sub getInputAbrev{
             }       
         }
         
-        for ($i=0;$i<$#teamNameArray;$i++)
+        for ($i=0;$i<$#teamNameArray+1;$i++)
         {
             if ($teamNameArray[$i][1] eq $inputAbr)
             {   
@@ -604,10 +609,7 @@ sub loopMatches{
     my $resultAway;
     
     for( $i = 0; $i<$numMatches; $i++){
-       # print "$matchArray[$i][0] ";
-       # print "$matchArray[$i][1] vs ";
-       # print "$matchArray[$i][2] ";
-       # print "$matchArray[$i][3]\n";
+       
 
         @home = &resultsInfo($matchArray[$i][0],$matchArray[$i][1]);
         @away = &resultsInfo($matchArray[$i][2],$matchArray[$i][3]);
@@ -646,21 +648,23 @@ sub loopMatches{
             $resultHome = genScore(\@homef,\@homea,$curQuart,$winPoint);
         }
         
-        $results[$i][0] = $matchArray[$i][1];
-        $results[$i][1] = $resultHome;
-        $results[$i][2] = $matchArray[$i][3];
-        $results[$i][3] = $resultAway;
+        $results[$i][0] = $matchArray[$i][0];
+        $results[$i][1] = $matchArray[$i][1];
+        $results[$i][2] = $resultHome;
+        $results[$i][3] = $matchArray[$i][2];
+        $results[$i][4] = $matchArray[$i][3];
+        $results[$i][5] = $resultAway;
         
 
     }
     
     #print the results 
-    print"game#\t| home\t| score\t| away\t| score\n";
+    print"game#\t| home\t| year\t| score\t| away\t| year\t| score\n";
     my $counter = 0;
     foreach(@results)
     {
         $counter++;
-        print"$counter\t| @$_[0]\t| @$_[1]\t| @$_[2]\t| @$_[3]\n";
+        print"$counter\t| @$_[0]\t| @$_[1]\t| @$_[2]\t| @$_[3] \t| @$_[4]\t| @$_[5]\n";
     }
     return 0;
 
