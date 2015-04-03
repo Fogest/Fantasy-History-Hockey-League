@@ -191,11 +191,12 @@ while ($usrInput1 != 4)
                 }                
                 if (($usrYearInput > 1916) && ($usrYearInput < 2015))
                 {
-                    my $yearFile = "../data/$usrYearInput/teams.csv";                        
+                    my $yearFile = "../data/$usrYearInput/teams.csv";                       
+                    print 'hi'; 
                     open (my $yearToTeamFH, "<",$yearFile) 
-                          
                         or die "Unable to open the required year's file: $yearFile";
                      
+                     print 'there';
                     my $yearToTeamRecord = <$yearToTeamFH>;
                     my $teamCount=0;
                     $tempCount=0; 
